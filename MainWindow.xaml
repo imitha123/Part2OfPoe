@@ -1,0 +1,158 @@
+﻿<Window x:Class="Part2OfPoe.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Part2OfPoe"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800"
+           
+        >
+    <Grid>
+
+        <Grid x:Name="WelcomeGrid"
+              Visibility="Visible"
+              >
+
+            <Grid.Background>
+
+                <ImageBrush ImageSource="/cybersecurity_dark_blue_background.jpg"/>
+                
+            </Grid.Background>
+
+            <Image Source="/cybersecurity_ai_chatbot_logo.jpg"
+       Height="250"
+       Width="250"
+       Margin="0,0,0,150">
+
+                <Image.Clip>
+                    <EllipseGeometry Center="125,125"
+                         RadiusX="115"
+                         RadiusY="115"/>
+                </Image.Clip>
+
+            </Image>
+
+            <Button  
+    Height="50"
+    Width="250"
+    Margin="0,170,0,0"
+    Content="Start SuperBot"
+    Click="start_ai"
+    FontSize="25"
+    FontFamily="Segoe Print"            
+    Background="White"
+    Foreground="Blue"
+    BorderBrush="White"
+    BorderThickness="2"            
+                
+    />
+
+
+        </Grid>
+        
+        <Grid x:Name="UsernameGrid"
+              Visibility="Hidden">
+            <Grid.Background>
+
+                <ImageBrush ImageSource="/cybersecurity_dark_blue_background.jpg"/>
+
+            </Grid.Background>
+
+
+
+
+            <TextBlock 
+    Text="Enter your username" 
+    FontSize="25"
+    HorizontalAlignment="Center"
+    Margin="0,80,0,0"
+    Foreground="WhiteSmoke"
+    FontFamily="Segoe Print"            />
+            
+            <TextBox x:Name="UsernameTextBox"
+                     Height="40"
+                     Width="300"
+                     Margin="0,0,0,90"
+                     FontSize="25"
+                     Text="Eg. John"
+                     Foreground="Gray"
+                     GotFocus="UsernameTextBox_GotFocus"
+                     FontFamily="Segoe Print"/>
+
+            <Button x:Name="SubmitButton"
+                    Height="40"
+                    Width="200"
+                    Content="Submit"
+                    Click="SubmitButton_Click"
+                    FontSize="20"
+                    FontFamily="Segoe Print"
+                    FontWeight="ExtraLight"
+                    />
+
+        </Grid>
+        
+        <Grid x:Name="ChatGrid"
+              Visibility="Hidden">
+
+            <Grid.Background>
+
+                <ImageBrush ImageSource="/cybersecurity_dark_blue_background.jpg"/>
+
+            </Grid.Background>
+
+            <TextBlock Text="Chat Messages"
+                       FontSize="25"
+                       HorizontalAlignment="Left"
+                       Margin="0,0,0,0"
+                       Foreground="LightBlue"
+                       FontFamily="Segoe Print"
+                       />
+            
+            <ListView 
+    x:Name="chats_list"
+    Height="400"
+    Width="1000"
+    Margin="-300,50,0,200"
+    Background="Black"
+    FontSize="15"
+    FontFamily="Segoe Print"            
+    FontWeight="ExtraLight"            
+    BorderThickness="2"  
+    BorderBrush="LightBlue" 
+    
+    />
+
+            <TextBox 
+       x:Name="chat_input"
+       Height="50"
+       Width="700"
+       Margin="-550,400,0,0"
+       FontSize="25" 
+       BorderThickness="2"      
+       BorderBrush="Black"  
+       FontFamily="Segoe Print"
+       FontWeight="ExtraLight" 
+       GotFocus="chat_input_GotFocus"        
+       Text="Ask anything about cybersecurity..."    
+       />
+
+            <Button 
+                Height="50"
+                Width="100"
+                Background="Transparent"
+                Foreground="Beige"
+                HorizontalAlignment="Center"
+                Margin="400,400,50,0"
+                Content="⬆️"
+                FontWeight="Medium"
+                FontSize="35"
+                Click="SendMessageButton"
+                BorderBrush="Black"
+                BorderThickness="2"/>
+
+            
+
+        </Grid>
+    </Grid>
+</Window>
