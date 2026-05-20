@@ -9,6 +9,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Shapes;
+using System.Speech.Synthesis;
 
 
 namespace Part2OfPoe
@@ -24,8 +25,7 @@ namespace Part2OfPoe
         }
         //Global variables
         string name;
-              string last_topic = "";
-        int count = 0;
+        
         Random random = new Random();
         my_dictionary dictionary = new my_dictionary();
 
@@ -153,9 +153,10 @@ namespace Part2OfPoe
             // Check if the message contains any of the topics
             bool topicFound = false;
 
+            
             foreach (var topic in dictionary.Topics())
             {
-                if (message.ToLower().Contains(topic.Key))
+                if (message.ToLower().Contains(topic.Key) && !message.ToLower().Trim().Contains("interested in"))
                 {
 
                     int randomIndex = random.Next(0, topic.Value.Length);
@@ -201,11 +202,19 @@ namespace Part2OfPoe
             {
                 if (message.ToLower().Trim().Contains("interested in"))
                 {
+                    // check if file exists if not create it
+                    if (!File.Exists("topics.txt"))
+                    {
+                        File.Create("topics.txt").Close();
+                    }
 
                     if (message.ToLower().Trim().Contains(topic.Key))
                     {
-                        File.AppendAllText("topics.txt", $" Favorite topic: {topic.Key} ({name})" + Environment.NewLine);
+                        File.AppendAllText("topics.txt", $" Favorite topic: {name} {topic.Key} " + Environment.NewLine);
                         MessageBox.Show($"Great! I have noted that your favorite topic is {topic.Key}. Feel free to ask me anything about {topic.Key}😊👍!", "Favorite Topic Noted", MessageBoxButton.OK, MessageBoxImage.Information);
+                        topicFound = true;
+                        chat_input.Focus();
+                        chat_input.Clear();
                     }
                 }
 
@@ -213,23 +222,36 @@ namespace Part2OfPoe
 
             foreach (var topic in dictionary.Topics())
             {
-                if (message.ToLower().Trim().Contains("what is my favorite topic"))
+                if (message.ToLower().Trim().Contains("favorite topic"))
                 {
-                    string[] lines = File.ReadAllLines("topics.txt");
-                    string favoriteTopic = lines.LastOrDefault(line => line.Contains($"({name})"));
-                    if (!string.IsNullOrEmpty(favoriteTopic))
+                    // check if file exists if not create it
+                    if (!File.Exists("topics.txt"))
                     {
-                        MessageBox.Show($"Your favorite topic is {favoriteTopic}!", "Favorite Topic", MessageBoxButton.OK, MessageBoxImage.Information);
+                        File.Create("topics.txt").Close();
                     }
-                    else
+
+                    if (File.Exists("topics.txt"))
                     {
-                        MessageBox.Show("I couldn't find your favorite topic.", "Favorite Topic", MessageBoxButton.OK, MessageBoxImage.Information);
+                        string[] lines = File.ReadAllLines("topics.txt");
+                        if (lines.Length > 0 && lines[lines.Length - 1].Contains(name))
+                        {
+                            string lastLine = lines[lines.Length - 1];
+                            MessageBox.Show($"Your Favorite Topic is {lastLine.Replace($" Favorite topic: {name}", "")}" , "Favorite Topic Found",MessageBoxButton.OK, MessageBoxImage.Information);
+                            topicFound = true;
+                            chat_input.Focus();
+                            chat_input.Clear();
+                            break;
+                        }
+                        else
+                        {
+                            MessageBox.Show("You haven't told me your favorite topic yet! Please tell me by saying 'I am interested in [topic]'.", "No Favorite Topic Found", MessageBoxButton.OK, MessageBoxImage.Information);
+                            chat_input.Focus();
+                            chat_input.Clear();
+                        }
                     }
+                   break;
                 }
             }
-
-
-
 
 
             if (!topicFound)
@@ -263,6 +285,7 @@ namespace Part2OfPoe
                 chats_list.Items.Add(response_panel);
                 chat_input.Focus();
                 chat_input.Clear();
+
             }
 
 

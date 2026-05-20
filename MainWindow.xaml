@@ -140,7 +140,7 @@
             <Button 
                 Height="50"
                 Width="100"
-                Background="Transparent"
+                Background="Black"
                 Foreground="Beige"
                 HorizontalAlignment="Center"
                 Margin="400,400,50,0"
