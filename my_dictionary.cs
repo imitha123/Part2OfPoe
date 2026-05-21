@@ -11,7 +11,7 @@ namespace Part2OfPoe
         // method to return a dictionary of topics and their definitions
         public Dictionary<string, string[]> Topics()
         {
-            
+
             Dictionary<string, string[]> topics = new Dictionary<string, string[]>()
         {
             { "phishing", new string[] { "Phishing is a cyber attack that uses disguised email as a weapon."
@@ -49,23 +49,63 @@ namespace Part2OfPoe
                 ,"Cybersecurity involves safeguarding sensitive information and maintaining the integrity, availability, and confidentiality of data."
                 ,"Cybersecurity is essential in today's digital landscape to protect against evolving threats and ensure the safety of online activities." } }
         };
-            
+
             return topics;
 
         }
-
+        // method to return a random response when the chatbot doesn't have information about a topic
         public string[] random_responces()
         {
             string[] responses = new string[]
             {
-                " I'm sorry, I don't have information about that topic😟.",
-                " I don't have information on that topic, but I'm here to help with anything related to cybersecurity!😊.",
-                " I'm not sure about that topic, but feel free to ask me anything else about cybersecurity!😄.",
-                " Oops! I seem to have trouble with that topic. Can you ask something else about cybersecurity? 😅"
+                " I'm sorry, I don't have information about that .",
+                " I don't have information on that, but I'm here to help with anything related to cybersecurity!.",
+                " I'm not sure about that, but feel free to ask me anything else about cybersecurity!.",
+                " Oops! I seem to have trouble with that. Can you ask something else about cybersecurity? "
 
             };
 
             return responses;
+        }
+        // method to return a random greeting when the chatbot is first started
+        public string[] random_greeting()
+        {
+            string[] greetings = new string[]
+            {
+                "Hello! I'm your cybersecurity chatbot. How can I assist you today?",
+                "Hi there! I'm here to help you with any cybersecurity questions you may have.",
+                "Greetings! I'm your friendly cybersecurity chatbot. What can I do for you today?",
+                "Welcome! I'm here to provide information and assistance on all things cybersecurity. How can I help you?"
+            };
+            return greetings;
+        }
+
+        //  method to return a random message when the users tells the chatbot their interesting topic and the chatbot tells the user that it will remember that topic 
+        public string[] random_remembering_message()
+        {
+            string[] remembering_messages = new string[]
+            {
+                "Got it! I'll remember that topic for future conversations.",
+                "Thanks for sharing! I'll keep that topic in mind for our future chats.",
+                "Great! I'll make a note of that topic for next time we talk.",
+                "Understood! I'll remember that topic and bring it up in our future discussions."
+            };
+            return remembering_messages;
+
+
+
+        }
+        // method to return a random message when the user asks for more information without first mentioning the topic
+        public string[] random_more_info_query_without_topic()
+        {
+            string[] more_info_queries = new string[]
+            {
+                "Could you please specify the topic you're interested in?",
+                "Sure! Which topic would you like more information about?",
+                "I'd be happy to provide more information. Could you please tell me which topic you're referring to?",
+                "Of course! To give you the best information, could you please specify the topic you're asking about?"
+            };
+            return more_info_queries;
         }
     }
 }

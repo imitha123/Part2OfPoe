@@ -28,6 +28,9 @@ namespace Part2OfPoe
         
         Random random = new Random();
         my_dictionary dictionary = new my_dictionary();
+        chatbot_voice voice = new chatbot_voice();
+         string current_topic = "";
+        int current_index = 0;
 
 
 
@@ -69,13 +72,19 @@ namespace Part2OfPoe
             };
             // list item for the welcome message and chatbot name with different colors and font sizes
             ListViewItem welcome_item = new ListViewItem();
+            Random rand = new Random();
+
+            int Index = rand.Next(0, dictionary.random_greeting().Length);
+
             welcome_item.Content = new TextBlock()
             {
-                Text = $": Welcome {name}! I am your CyberSecurity Chatbot, you may ask me anything about cybersecurity.😁",
+                
+                Text = dictionary.random_greeting()[Index],
                 Foreground = Brushes.LightBlue,
                 FontSize = 15,
 
             };
+            voice.speak(dictionary.random_greeting()[Index]);
 
             ListViewItem bot_name_item = new ListViewItem();
             bot_name_item.Content = new TextBlock
@@ -130,6 +139,7 @@ namespace Part2OfPoe
 
             chats_list.Items.Add(panel);
 
+            // validate the message input
             if (String.IsNullOrEmpty(message))
             {
                 MessageBox.Show("Message cannot be empty!", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
@@ -140,7 +150,7 @@ namespace Part2OfPoe
             if (message.ToLower().Equals("exit"))
             {
 
-                if(MessageBoxResult.Yes == MessageBox.Show("Are you sure you want to exit?", "Exit Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question))
+                if (MessageBoxResult.Yes == MessageBox.Show("Are you sure you want to exit?", "Exit Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question))
                 {
                     Application.Current.Shutdown();
                 }
@@ -169,6 +179,12 @@ namespace Part2OfPoe
                         Foreground = Brushes.LightBlue,
                         FontSize = 15,
                     };
+                    current_topic = topic.Key;
+                    current_index = randomIndex;
+
+                    voice.speak(topic.Value[randomIndex]);
+
+
                     // list item for the chatbot name with different color and font size
                     ListViewItem bot_name_item = new ListViewItem();
                     bot_name_item.Content = new TextBlock
@@ -186,10 +202,12 @@ namespace Part2OfPoe
                     topic_panel.Children.Add(bot_name_item);
                     topic_panel.Children.Add(topic_item);
 
+                    // add the stack panel to the chat list
                     chats_list.Items.Add(topic_panel);
                     topicFound = true;
                     chat_input.Focus();
                     chat_input.Clear();
+
 
 
                    
@@ -197,11 +215,89 @@ namespace Part2OfPoe
                 }
 
             }
+            // check if the message contains tell me more or explain more or give me another tip and responds with another definition of the topic that is already mentioned in the message
+            if(message.ToLower().Trim().Contains("tell me more") || message.ToLower().Trim().Contains("explain more") || message.ToLower().Trim().Contains("give me another tip"))
+            {
+                Random random = new Random();
 
+                int randomIndex = random.Next(0, dictionary.random_more_info_query_without_topic().Length);
+
+                if (!String.IsNullOrEmpty(current_topic))
+                {
+
+                    var topic_definitions = dictionary.Topics()[current_topic];
+                    current_index = (current_index + 1) % topic_definitions.Length;
+                    ListViewItem topic_item = new ListViewItem();
+                    topic_item.Content = new TextBlock
+                    {
+                        Text = $": {topic_definitions[current_index]} ",
+                        Foreground = Brushes.LightBlue,
+                        FontSize = 15,
+                    };
+                    voice.speak(topic_definitions[current_index]);
+                    ListViewItem bot_name_item = new ListViewItem();
+                    bot_name_item.Content = new TextBlock
+                    {
+                        Text = $"ChatBot",
+                        Foreground = Brushes.Green,
+                        FontSize = 15,
+                    };
+                    StackPanel topic_panel = new StackPanel
+                    {
+                        Orientation = Orientation.Horizontal
+                    };
+                    topic_panel.Children.Add(bot_name_item);
+                    topic_panel.Children.Add(topic_item);
+                    chats_list.Items.Add(topic_panel);
+
+                    topicFound = true;
+                    chat_input.Focus();
+                    chat_input.Clear();
+                }
+                    else
+                    {
+                    
+                   
+                    ListViewItem topic_item = new ListViewItem();
+                    topic_item.Content = new TextBlock
+                    {
+                        Text = $": {dictionary.random_more_info_query_without_topic()[randomIndex]} ",
+                        Foreground = Brushes.LightBlue,
+                        FontSize = 15,
+                    };
+                    voice.speak(dictionary.random_more_info_query_without_topic()[randomIndex]);
+                    MessageBox.Show(dictionary.random_more_info_query_without_topic()[randomIndex], "No Topic Mentioned", MessageBoxButton.OK, MessageBoxImage.Information);
+
+                    ListViewItem bot_name_item = new ListViewItem();
+                    bot_name_item.Content = new TextBlock
+                    {
+                        Text = $"ChatBot",
+                        Foreground = Brushes.Green,
+                        FontSize = 15,
+                    };
+                    StackPanel topic_panel = new StackPanel
+                    {
+                        Orientation = Orientation.Horizontal
+                    };
+                    topic_panel.Children.Add(bot_name_item);
+                    topic_panel.Children.Add(topic_item);
+                    chats_list.Items.Add(topic_panel);
+                    chat_input.Focus();
+                        chat_input.Clear();
+                        topicFound = true;
+                }
+            }
+
+
+
+            // Check if the message contains "interested in" and a topic
             foreach (var topic in dictionary.Topics())
             {
                 if (message.ToLower().Trim().Contains("interested in"))
                 {
+                    Random rand = new Random();
+
+                    int randInt = rand.Next(0, dictionary.random_remembering_message().Length);
                     // check if file exists if not create it
                     if (!File.Exists("topics.txt"))
                     {
@@ -211,7 +307,8 @@ namespace Part2OfPoe
                     if (message.ToLower().Trim().Contains(topic.Key))
                     {
                         File.AppendAllText("topics.txt", $" Favorite topic: {name} {topic.Key} " + Environment.NewLine);
-                        MessageBox.Show($"Great! I have noted that your favorite topic is {topic.Key}. Feel free to ask me anything about {topic.Key}😊👍!", "Favorite Topic Noted", MessageBoxButton.OK, MessageBoxImage.Information);
+                        voice.speak(dictionary.random_remembering_message()[randInt]);
+                        MessageBox.Show(dictionary.random_remembering_message()[randInt], "Topic Remembered", MessageBoxButton.OK, MessageBoxImage.Information);
                         topicFound = true;
                         chat_input.Focus();
                         chat_input.Clear();
@@ -219,7 +316,7 @@ namespace Part2OfPoe
                 }
 
             }
-
+            // Check if the message contains "favorite topic" and recall the topic from the text file
             foreach (var topic in dictionary.Topics())
             {
                 if (message.ToLower().Trim().Contains("favorite topic"))
@@ -236,6 +333,7 @@ namespace Part2OfPoe
                         if (lines.Length > 0 && lines[lines.Length - 1].Contains(name))
                         {
                             string lastLine = lines[lines.Length - 1];
+                            voice.speak($"Your Favorite Topic is {lastLine.Replace($" Favorite topic: {name}", "")}");
                             MessageBox.Show($"Your Favorite Topic is {lastLine.Replace($" Favorite topic: {name}", "")}" , "Favorite Topic Found",MessageBoxButton.OK, MessageBoxImage.Information);
                             topicFound = true;
                             chat_input.Focus();
@@ -244,6 +342,7 @@ namespace Part2OfPoe
                         }
                         else
                         {
+                            voice.speak("You haven't told me your favorite topic yet! Please tell me by saying 'I am interested in [topic]'.");
                             MessageBox.Show("You haven't told me your favorite topic yet! Please tell me by saying 'I am interested in [topic]'.", "No Favorite Topic Found", MessageBoxButton.OK, MessageBoxImage.Information);
                             chat_input.Focus();
                             chat_input.Clear();
@@ -253,7 +352,7 @@ namespace Part2OfPoe
                 }
             }
 
-
+            // if no topic is found in the message, return a random response from the dictionary
             if (!topicFound)
             {
                 Random rand = new Random();
@@ -271,6 +370,7 @@ namespace Part2OfPoe
                     Foreground = Brushes.Red,
                     FontSize = 15,
                 };
+                voice.speak(dictionary.random_responces()[randInt]);
 
                 ListViewItem bot_name_item = new ListViewItem();
                 bot_name_item.Content = new TextBlock
