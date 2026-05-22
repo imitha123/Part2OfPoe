@@ -12,7 +12,7 @@
     <Grid>
 
         <Grid x:Name="WelcomeGrid"
-              Visibility="Hidden"
+              Visibility="Visible"
               >
 
             <Grid.Background>
@@ -141,7 +141,7 @@
         </Grid>
 
         <Grid x:Name="ChatGrid"
-              Visibility="Visible">
+              Visibility="Hidden">
 
             <Grid.Background>
 
@@ -181,7 +181,7 @@
               FontFamily="Segoe Print"
               FontWeight="ExtraLight"
               ScrollViewer.VerticalScrollBarVisibility="Auto"
-              ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+              ScrollViewer.HorizontalScrollBarVisibility="Auto">
 
                     <!-- Optional spacing between chat items -->
                     <ListView.ItemContainerStyle>
