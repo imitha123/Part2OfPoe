@@ -125,14 +125,13 @@ namespace Part2OfPoe
             string[] favorite_topic_not_found_messages = new string[]
             {
                 "I couldn't find your favorite topic in my database. If you want me to remember it, " +
-                "just ask more about it saying, 'tell me more', or ,'Explain more'. In that way i will know you are interested in it",
+                "just ask more about it saying, \n'tell me more' \n 'Explain more'.\nIn that way i will know you are interested in it",
                 "It seems like your favorite topic isn't in my records. If you want me to remember it, just ask more about it " +
-                "saying, 'tell me more', or ,'Explain more'. In that way i will know you are interested in it",
+                "saying, \n'tell me more' \n 'Explain more'.\nIn that way i will know you are interested in it",
                 "I don't have information on your favorite topic. If you want me to remember it, just ask more about it " +
-                "saying, 'tell me more', or ,'Explain more'. " +
-                "In that way i will know you are interested in it",
+                "saying, \n'tell me more' \n 'Explain more'.\nIn that way i will know you are interested in it",
                 "Your favorite topic isn't in my database. If you want me to remember it, just ask more about it " +
-                "saying, 'tell me more', or ,'Explain more'. " +
+                "saying, \n'tell me more' \n 'Explain more'.\nIn that way i will know you are interested in it",
                 "In that way i will know you are interested in it"
             };
             return favorite_topic_not_found_messages;

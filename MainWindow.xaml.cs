@@ -28,7 +28,8 @@ namespace Part2OfPoe
         }
         //Global variables
         string name;
-        
+
+
         Random random = new Random();
         // create an instance of the dictionary and arrays class to access the topics and responses
         my_dictionary_and_arrays dictionary = new my_dictionary_and_arrays();
@@ -38,10 +39,13 @@ namespace Part2OfPoe
         List_view_items list_items = new List_view_items();
         // create an instance of the name validation class to access the method that validates the name input
         name_validation validate = new name_validation();
+
         // variables to keep track of the current topic and index of the response for that topic
         string current_topic = "";
         int current_index = 0;
         bool topicFound = false;
+        bool more_info_true_or_fasle = false;
+        int count = 1;
 
 
 
@@ -59,7 +63,7 @@ namespace Part2OfPoe
         private void SubmitButton_Click(object sender, RoutedEventArgs e)
         {
             // take the name from the text box and set it to the validate
-            name = UsernameTextBox.Text.Trim();
+            name = UsernameTextBox.Text.Trim().ToLower();
 
             // validate the name input
             if (!validate.validate_name(name))
@@ -158,7 +162,7 @@ namespace Part2OfPoe
                     chats_list.Items.Add(topic_panel);
 
                     focus_or_clear_chat_input();
-
+                    topicFound = true;
                     break;
                 }
 
@@ -169,33 +173,32 @@ namespace Part2OfPoe
                 Random rand = new Random();
                 int index = rand.Next(0, dictionary.random_more_info_query_without_topic().Length);
 
-                if (!String.IsNullOrEmpty(current_topic))
+                if (!String.IsNullOrEmpty(current_topic) )
                 {
+                    // if the user asks for more information about a topic for the second time, don't ask if they are interested in it
+                    if(count == 1)
+                    {
+                        if_user_asks_for_more_info();
+                    }
+                    // increment 
+                    count++;
 
-                    if_user_asks_for_more_info();
 
                     var topic_definitions = dictionary.Topics()[current_topic];
                     current_index = (current_index + 1) % topic_definitions.Length;
 
-                    ListViewItem topic_item = new ListViewItem();
-                    topic_item.Content = new TextBlock
-                    {
-                        Text = $": {topic_definitions[current_index]} ",
-                        Foreground = Brushes.LightBlue,
-                        FontSize = 15,
-                    };
-                   
-                  
                     StackPanel topic_panel = new StackPanel
                     {
                         Orientation = Orientation.Horizontal
                     };
                     topic_panel.Children.Add(list_items.chatbot_name());
-                    topic_panel.Children.Add(topic_item);
+                    topic_panel.Children.Add(list_items.topic_item($": {topic_definitions[current_index]} "));
                     chats_list.Items.Add(topic_panel);
+
                     voice.speak(topic_definitions[current_index]);
 
                     focus_or_clear_chat_input();
+                    topicFound = true;
                 }
                     else
                     {
@@ -214,6 +217,7 @@ namespace Part2OfPoe
                     chats_list.Items.Add(topic_panel);
 
                     focus_or_clear_chat_input();
+                    topicFound = true;
                 }
             }
             // if the user asks what their favorite topic is, the chatbot responds with the topic that is mentioned int the topics file according to the name of the user
@@ -239,14 +243,16 @@ namespace Part2OfPoe
                         MessageBox.Show($"Your favorite topic is {favorite_topic}", "Favorite Topic", MessageBoxButton.OK, MessageBoxImage.Information);
 
                         focus_or_clear_chat_input();
-
+                        topicFound = true;
                         StackPanel topic_panel = new StackPanel
                         {
                             Orientation = Orientation.Horizontal
                         };
+
                         topic_panel.Children.Add(list_items.chatbot_name());
                         topic_panel.Children.Add(list_items.topic_item($"Your favorite topic is {favorite_topic}"));
                         chats_list.Items.Add(topic_panel);
+                        topicFound = true;
                     }
                     else
                     {
@@ -261,9 +267,12 @@ namespace Part2OfPoe
                         };
                         topic_panel.Children.Add(list_items.chatbot_name());
                         topic_panel.Children.Add(list_items.topic_item(dictionary.random_favorite_topic_not_found()[index]));
+
                         chats_list.Items.Add(topic_panel);
 
                         focus_or_clear_chat_input();
+                    
+                        
                     }
 
                 }
@@ -307,6 +316,8 @@ namespace Part2OfPoe
             Random rand = new Random();
             int index = rand.Next(0, dictionary.random_ask_user_if_they_are_interested_in_topic().Length);
             voice.speak(dictionary.random_ask_user_if_they_are_interested_in_topic()[index]);
+           
+
             if (MessageBoxResult.Yes == MessageBox.Show(dictionary.random_ask_user_if_they_are_interested_in_topic()[index], "More Information", MessageBoxButton.YesNo, MessageBoxImage.Question))
             {
                 if (!File.Exists("topics.txt"))
@@ -334,7 +345,7 @@ namespace Part2OfPoe
         {
             chat_input.Focus();
             chat_input.Clear();
-            topicFound = true;
+
         }
 
         private void MainWindow_Closing(object sender, CancelEventArgs e)
