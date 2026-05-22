@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Part2OfPoe
 {
-    public class my_dictionary
+    public class my_dictionary_and_arrays
     {
         // method to return a dictionary of topics and their definitions
         public Dictionary<string, string[]> Topics()
@@ -54,7 +54,7 @@ namespace Part2OfPoe
 
         }
         // method to return a random response when the chatbot doesn't have information about a topic
-        public string[] random_responces()
+        public string[] random_responces_if_no_info()
         {
             string[] responses = new string[]
             {
@@ -80,21 +80,9 @@ namespace Part2OfPoe
             return greetings;
         }
 
-        //  method to return a random message when the users tells the chatbot their interesting topic and the chatbot tells the user that it will remember that topic 
-        public string[] random_remembering_message()
-        {
-            string[] remembering_messages = new string[]
-            {
-                "Got it! I'll remember that topic for future conversations.",
-                "Thanks for sharing! I'll keep that topic in mind for our future chats.",
-                "Great! I'll make a note of that topic for next time we talk.",
-                "Understood! I'll remember that topic and bring it up in our future discussions."
-            };
-            return remembering_messages;
 
 
 
-        }
         // method to return a random message when the user asks for more information without first mentioning the topic
         public string[] random_more_info_query_without_topic()
         {
@@ -106,6 +94,48 @@ namespace Part2OfPoe
                 "Of course! To give you the best information, could you please specify the topic you're asking about?"
             };
             return more_info_queries;
+        }
+        // method to return a random message asking the user if they are interested in the topic they wanted more information about
+        public string[] random_ask_user_if_they_are_interested_in_topic()
+        {
+            string[] ask_user_if_they_are_interested_in_topic = new string[]
+            {
+               "Oh, you're interested in that topic?",
+                "I see you're curious about that topic! Are you interested in it?",
+                "That topic is quite interesting! Are you interested in learning more about it?",
+                "It seems like you want to know more about that topic! Are you interested in it?"
+            };
+            return ask_user_if_they_are_interested_in_topic;
+        }
+        // method to return a random message when the user is not interested in the topic they wanted more information about
+        public string[] random_not_interested_in_topic()
+        {
+            string[] not_interested_messages = new string[]
+            {
+                "No worries! Is there anything else you'd like to know about cybersecurity?",
+                "Understood! Would you like to explore a different topic related to cybersecurity?",
+                "Got it! Do you have any other questions about cybersecurity?",
+                "Alright! Feel free to ask about anything else related to cybersecurity."
+            };
+            return not_interested_messages;
+        }
+        // method to return a random message when the user's favorite topic is not found in the topics.txt file
+        public string[] random_favorite_topic_not_found()
+        {
+            string[] favorite_topic_not_found_messages = new string[]
+            {
+                "I couldn't find your favorite topic in my database. If you want me to remember it, " +
+                "just ask more about it saying, 'tell me more', or ,'Explain more'. In that way i will know you are interested in it",
+                "It seems like your favorite topic isn't in my records. If you want me to remember it, just ask more about it " +
+                "saying, 'tell me more', or ,'Explain more'. In that way i will know you are interested in it",
+                "I don't have information on your favorite topic. If you want me to remember it, just ask more about it " +
+                "saying, 'tell me more', or ,'Explain more'. " +
+                "In that way i will know you are interested in it",
+                "Your favorite topic isn't in my database. If you want me to remember it, just ask more about it " +
+                "saying, 'tell me more', or ,'Explain more'. " +
+                "In that way i will know you are interested in it"
+            };
+            return favorite_topic_not_found_messages;
         }
     }
 }
