@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using static System.Net.Mime.MediaTypeNames;
@@ -32,6 +33,8 @@ namespace Part2OfPoe
             topic_item.Content = new TextBlock
             {
                 Text = $": {text} ",
+                TextWrapping = TextWrapping.Wrap,
+                Width = 800,
                 Foreground = Brushes.LightBlue,
                 FontSize = 15,
             };
@@ -88,6 +91,22 @@ namespace Part2OfPoe
             };
             return welcome_item;
         }
+        public ListViewItem return_sentiment_support_and_tip(string sentiment, string tip)
+        {
+          
+            ListViewItem topic_item = new ListViewItem();
+            topic_item.Content = new TextBlock
+            {
+                Text = $": {sentiment} \n {tip} ",
+                TextWrapping = TextWrapping.Wrap,
+                Width = 800,
+                Foreground = Brushes.LightBlue,
+                FontSize = 15,
+            };
+            return topic_item;
+
+        }
 
     }
+    
 }

@@ -140,7 +140,7 @@ namespace Part2OfPoe
             {
                 if (message.ToLower().Trim().Contains(topic.Key))
                 {
-
+                    count = 1;
                     int randomIndex = random.Next(0, topic.Value.Length);
 
                     current_topic = topic.Key;
@@ -223,7 +223,8 @@ namespace Part2OfPoe
             // if the user asks what their favorite topic is, the chatbot responds with the topic that is mentioned int the topics file according to the name of the user
             if (message.ToLower().Trim().Contains("favorite topic"))
             {
-                if(!File.Exists("topics.txt"))
+                count = 1;
+                if (!File.Exists("topics.txt"))
                 {
                     File.Create("topics.txt").Close();
                 }
@@ -275,6 +276,34 @@ namespace Part2OfPoe
                         
                     }
 
+                }
+
+            }
+            // check for any sentiment in the message and respond with a random response from the dictionary according to the sentiment
+            foreach (var sentiment in dictionary.sentiment_detection())
+            {
+                if (message.ToLower().Trim().Contains(sentiment.Key))
+                {
+                    count = 1;
+                    int randomIndex = random.Next(0, sentiment.Value.Length);
+                    int rand = random.Next(0, dictionary.user_tips().Length);
+                    voice.speak(sentiment.Value[randomIndex]);
+                    
+                   
+                    StackPanel sentiment_panel = new StackPanel
+                    {
+                        Orientation = Orientation.Horizontal
+                    };
+                    sentiment_panel.Children.Add(list_items.chatbot_name());
+                    sentiment_panel.Children.Add(list_items.return_sentiment_support_and_tip(sentiment.Value[randomIndex], dictionary.user_tips()[rand]));
+                    
+                    voice.speak(dictionary.user_tips()[rand]);
+
+                    chats_list.Items.Add(sentiment_panel);
+
+                    focus_or_clear_chat_input();
+                    topicFound = true;
+                    break;
                 }
 
             }
@@ -362,7 +391,10 @@ namespace Part2OfPoe
             {
                 e.Cancel = true;
             }
+
+
         }
+       
 
     }
 }

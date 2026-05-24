@@ -9,20 +9,17 @@ namespace Part2OfPoe
 {
     public class chatbot_voice
     {
-       
-
-       
+        SpeechSynthesizer synthesizer = new SpeechSynthesizer();
 
         public void speak(string chatbot_response)
         {
-            SpeechSynthesizer synthesizer = new SpeechSynthesizer();
-            // set the voice to microsoft zira desktop
+           
             synthesizer.SelectVoiceByHints(VoiceGender.Female, VoiceAge.Senior);
-            synthesizer.Rate = 2; // set the rate to normal
-            synthesizer.Volume = 100; // set the volume to maximum
+            synthesizer.Rate = 2;
+            synthesizer.Volume = 100;
             synthesizer.SpeakAsync(chatbot_response);
-
         }
+       
 
     }
 }

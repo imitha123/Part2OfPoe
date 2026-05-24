@@ -136,5 +136,44 @@ namespace Part2OfPoe
             };
             return favorite_topic_not_found_messages;
         }
+        public Dictionary<string, string[]> sentiment_detection()
+        {
+            Dictionary<string, string[]> sentiment_detec = new Dictionary<string, string[]>
+            {
+                {"worried", new string[] {"It's completely okay to feel worried. Scammers can be very convincing, but remember that legitimate organizations will never ask for sensitive information over the phone or via email.",
+                                           "It's okay to feel that way. The internet can be a scary place, but remember to stay informed and vigilant.",
+                                           "Don't worry, you're not alone in this. I can always help you navigate through these concerns." } },
+                {"scared", new string[] {"It's normal to feel scared when dealing with potential scams. Just remember to stay calm and never share personal information with anyone you don't trust.",
+                                         "It's understandable to feel that way. Just don't let fear control you.",
+                                         "Online safety is important, and it's okay to be concerned about it" } },
+                {"confused", new string[] {"Feeling confused is understandable, especially with the many types of scams out there. If you're unsure about something, it's always best to verify it through official channels.",
+                                           "Confusion is what the scammers are counting on. So try not to get too caught up in the details.",
+                                           "Take your time to understand the situation. It's important to be informed before making any decisions."} },
+                {"angry", new string[] {"It's natural to feel angry when you encounter scams. Just remember that scammers thrive on fear and anger, so try to stay calm and report any suspicious activity to the authorities.",
+                                        "It's okay to feel angry, but try not to let it cloud your judgment. Stay informed and seek help when needed.",
+                                         "It's understandable to feel angry, but try to channel that energy into taking action."} },
+                {"frustrated", new string[] {"Feeling frustrated is common when dealing with scams. Just remember that you're not alone, and there are resources available to help you protect yourself from scammers.",
+                                             "It's okay to feel frustrated. Take a deep breath and focus on the steps you can take to protect yourself.",
+                                             "You're not alone in this. There are people and resources available to help you navigate through these challenges."} }
+            };
+            return sentiment_detec;
+        }
+        public string[] user_tips()
+        {
+            string[] onlineSafetyTips =
+                {
+                    "Here's a tip: \nUse strong and unique passwords - Strong passwords are harder to guess and unique passwords prevent multiple accounts from being hacked at once.",
+    "Here's a tip: \nEnable two-factor authentication - This adds an extra layer of security by requiring a second verification step when logging in.",
+    "Here's a tip: \nDo not click suspicious links -Unknown links may contain scams, viruses, or phishing websites designed to steal information.",
+    "Here's a tip: \nKeep your software updated - Updates fix security weaknesses and protect your device from new threats.",
+    "Here's a tip: \nAvoid sharing personal information online - Sharing sensitive details can expose you to identity theft and scams.",
+    "Here's a tip: \nUse antivirus and firewall protection -These tools help detect, block, and remove harmful software.",
+    "Here's a tip: \nBe careful when using public Wi-Fi -Public networks are less secure and hackers may intercept your information.",
+    "Here's a tip: \nVerify websites before entering passwords - Fake websites can steal login information by pretending to be trusted sites.",
+    "Here's a tip: \nDo not download unknown files -Untrusted downloads may contain malware or viruses that damage your device.",
+    "Here's a tip: \nLog out of accounts on shared devices - Logging out prevents other users from accessing your personal accounts."
+                };
+            return onlineSafetyTips;
+        }
     }
 }
