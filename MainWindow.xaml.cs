@@ -107,7 +107,7 @@ namespace Part2OfPoe
             // create a stack panel to hold the name and message
             StackPanel panel = new StackPanel
             {
-                Orientation = Orientation.Horizontal
+                Orientation = Orientation.Vertical
             };
 
             panel.Children.Add(list_items.user_name(name));
@@ -155,7 +155,7 @@ namespace Part2OfPoe
                     // create a stack panel to hold the chatbot name and response
                     StackPanel topic_panel = new StackPanel
                     {
-                        Orientation = Orientation.Horizontal
+                        Orientation = Orientation.Vertical
                     };
 
                     topic_panel.Children.Add(list_items.chatbot_name());
@@ -192,7 +192,7 @@ namespace Part2OfPoe
 
                     StackPanel topic_panel = new StackPanel
                     {
-                        Orientation = Orientation.Horizontal
+                        Orientation = Orientation.Vertical
                     };
                     topic_panel.Children.Add(list_items.chatbot_name());
                     topic_panel.Children.Add(list_items.topic_item($": {topic_definitions[current_index]} "));
@@ -212,7 +212,7 @@ namespace Part2OfPoe
                   
                     StackPanel topic_panel = new StackPanel
                     {
-                        Orientation = Orientation.Horizontal
+                        Orientation = Orientation.Vertical
                     };
 
                     topic_panel.Children.Add(list_items.chatbot_name());
@@ -250,7 +250,7 @@ namespace Part2OfPoe
                         topicFound = true;
                         StackPanel topic_panel = new StackPanel
                         {
-                            Orientation = Orientation.Horizontal
+                            Orientation = Orientation.Vertical
                         };
 
                         topic_panel.Children.Add(list_items.chatbot_name());
@@ -267,7 +267,7 @@ namespace Part2OfPoe
 
                         StackPanel topic_panel = new StackPanel
                         {
-                            Orientation = Orientation.Horizontal
+                            Orientation = Orientation.Vertical
                         };
                         topic_panel.Children.Add(list_items.chatbot_name());
                         topic_panel.Children.Add(list_items.topic_item(dictionary.random_favorite_topic_not_found()[index]));
@@ -295,7 +295,7 @@ namespace Part2OfPoe
                    
                     StackPanel sentiment_panel = new StackPanel
                     {
-                        Orientation = Orientation.Horizontal
+                        Orientation = Orientation.Vertical
                     };
                     sentiment_panel.Children.Add(list_items.chatbot_name());
                     sentiment_panel.Children.Add(list_items.return_sentiment_support_and_tip(sentiment.Value[randomIndex], dictionary.user_tips()[rand]));
@@ -319,7 +319,7 @@ namespace Part2OfPoe
 
                 StackPanel response_panel = new StackPanel
                 {
-                    Orientation = Orientation.Horizontal
+                    Orientation = Orientation.Vertical
                 };
                 // list item for the chatbot response with a random response from the dictionary and different color and font size
                 

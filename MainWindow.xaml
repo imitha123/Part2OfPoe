@@ -249,12 +249,15 @@
               FontFamily="Segoe Print"
               FontWeight="ExtraLight"
               ScrollViewer.VerticalScrollBarVisibility="Auto"
-              ScrollViewer.HorizontalScrollBarVisibility="Auto">
+              ScrollViewer.CanContentScroll="False"
+              VirtualizingStackPanel.ScrollUnit="Pixel"
+                          
+              ScrollViewer.HorizontalScrollBarVisibility="Disabled">
 
                     <!-- Optional spacing between chat items -->
                     <ListView.ItemContainerStyle>
                         <Style TargetType="ListViewItem">
-                            <Setter Property="Margin" Value="0,5,0,5"/>
+                            <Setter Property="Margin" Value="0,3,0,5"/>
                             <Setter Property="Padding" Value="8"/>
                             <Setter Property="Background" Value="Transparent"/>
                             <Setter Property="BorderThickness" Value="1.5"/>

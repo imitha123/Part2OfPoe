@@ -24,7 +24,7 @@ namespace Part2OfPoe
             {
                 Text = $"ChatBot",
                 Foreground = Brushes.Green,
-                FontSize = 15,
+                FontSize = 13,
             };
             return item;
         }
@@ -35,9 +35,9 @@ namespace Part2OfPoe
             {
                 Text = $": {text}",
                 TextWrapping = TextWrapping.Wrap,
-                Width = 800,
-                Foreground = Brushes.LightBlue,
-                FontSize = 15,
+                Width = 650,
+                Foreground = Brushes.Black,
+                FontSize = 17,
                 Margin = new Thickness(5)
                
             };
@@ -45,17 +45,17 @@ namespace Part2OfPoe
             Border border = new Border
             {
                 CornerRadius = new CornerRadius(40),
-                Background = Brushes.Black,
+                Background = Brushes.DarkCyan,
                 BorderThickness = new Thickness(1.5),
                 Padding = new Thickness(10),
                 Child = textBlock,
 
                 Effect = new DropShadowEffect
                 {
-                    BlurRadius = 15,
+                    BlurRadius = 10,
                     ShadowDepth = 2,
-                    Color = Colors.LightBlue,
-                    Opacity = 0.3
+                    Color = Colors.Cyan,
+                    Opacity = 0.25
                 }
             };
 
@@ -63,7 +63,7 @@ namespace Part2OfPoe
             {
                 Content = border,
                 Background = Brushes.Transparent,
-                BorderThickness = new Thickness(0)
+                BorderThickness = new Thickness(1)
             };
 
             return topic_item;
@@ -75,8 +75,8 @@ namespace Part2OfPoe
             Name_item.Content = new TextBlock
             {
                 Text = $"{name}",
-                Foreground = Brushes.White,
-                FontSize = 15,
+                Foreground = Brushes.WhiteSmoke,
+                FontSize = 13,
             };
             return Name_item;
         }
@@ -89,7 +89,7 @@ namespace Part2OfPoe
                 TextWrapping = TextWrapping.Wrap,
                 HorizontalAlignment = HorizontalAlignment.Left,
                 Foreground = Brushes.Yellow,
-                FontSize = 15,
+                FontSize = 17,
                 Margin = new Thickness(5)
             };
 
@@ -97,17 +97,17 @@ namespace Part2OfPoe
             {
                 CornerRadius = new CornerRadius(27),
                 HorizontalAlignment = HorizontalAlignment.Left,
-                Background = Brushes.Black,
+                Background = Brushes.DarkCyan,
                 BorderThickness = new Thickness(1.5),
                 Padding = new Thickness(10),
                 Child = textBlock,
 
                 Effect = new DropShadowEffect
                 {
-                    BlurRadius = 15,
+                    BlurRadius = 10,
                     ShadowDepth = 2,
-                    Color = Colors.LightBlue,
-                    Opacity = 0.3
+                    Color = Colors.Cyan,
+                    Opacity = 0.25
                 }
 
             };
@@ -116,7 +116,7 @@ namespace Part2OfPoe
             {
                Content = border,
                Background = Brushes.Transparent,
-               BorderThickness = new Thickness(0)
+               BorderThickness = new Thickness(1)
             };
             return Message_item;
         }
@@ -128,7 +128,7 @@ namespace Part2OfPoe
                 Text = $": {text}",
                 TextWrapping = TextWrapping.Wrap,
                 Foreground = Brushes.Red,
-                FontSize = 15,
+                FontSize = 17,
                 Margin = new Thickness(5)
             };
         
@@ -137,17 +137,17 @@ namespace Part2OfPoe
             {
                 CornerRadius = new CornerRadius(27),
                 HorizontalAlignment = HorizontalAlignment.Left,
-                Background = Brushes.Black,
+                Background = Brushes.DarkCyan,
                 BorderThickness = new Thickness(1.5),
                 Padding = new Thickness(10),
                 Child = textBlock,
 
                 Effect = new DropShadowEffect
                 {
-                    BlurRadius = 15,
+                    BlurRadius = 10,
                     ShadowDepth = 2,
-                    Color = Colors.LightBlue,
-                    Opacity = 0.3
+                    Color = Colors.Cyan,
+                    Opacity = 0.25
                 }
 
             };
@@ -155,7 +155,7 @@ namespace Part2OfPoe
             {
                Content = border,
                Background = Brushes.Transparent,
-               BorderThickness = new Thickness(0)
+               BorderThickness = new Thickness(1)
             };
            
             return no_topic_found;
@@ -168,7 +168,7 @@ namespace Part2OfPoe
 
                 Text = text,
                 Foreground = Brushes.LightBlue,
-                FontSize = 15,
+                FontSize = 13,
 
             };
             return welcome_item;
@@ -180,7 +180,7 @@ namespace Part2OfPoe
                 Text = $": {sentiment} \n {tip} ",
                 TextWrapping = TextWrapping.Wrap,
                 Foreground = Brushes.LightBlue,
-                FontSize = 15,
+                FontSize = 16,
                 Margin = new Thickness(5)
 
             };
@@ -188,24 +188,24 @@ namespace Part2OfPoe
             Border border = new Border()
             {
                 CornerRadius = new CornerRadius(27),
-                HorizontalAlignment = HorizontalAlignment.Left,
-                Background = Brushes.Black,
+                Width = 650,
+                Background = Brushes.DarkCyan,
                 BorderThickness = new Thickness(1.5),
                 Padding = new Thickness(10),
                 Child = block,
                 Effect = new DropShadowEffect
                 {
-                    BlurRadius = 15,
+                    BlurRadius = 10,
                     ShadowDepth = 2,
-                    Color = Colors.LightBlue,
-                    Opacity = 0.3
+                    Color = Colors.Cyan,
+                    Opacity = 0.25
                 }
             };
             ListViewItem topic_item = new ListViewItem()
             {
                 Content = border,
                 Background = Brushes.Transparent,
-                BorderThickness = new Thickness(0)
+                BorderThickness = new Thickness(1)
             };
             return topic_item;
 
