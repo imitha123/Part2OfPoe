@@ -124,15 +124,17 @@ namespace Part2OfPoe
         {
             string[] favorite_topic_not_found_messages = new string[]
             {
-                "I couldn't find your favorite topic in my database. If you want me to remember it, " +
-                "just ask more about it saying, \n'tell me more' \n 'Explain more'.\nIn that way i will know you are interested in it",
-                "It seems like your favorite topic isn't in my records. If you want me to remember it, just ask more about it " +
-                "saying, \n'tell me more' \n 'Explain more'.\nIn that way i will know you are interested in it",
-                "I don't have information on your favorite topic. If you want me to remember it, just ask more about it " +
-                "saying, \n'tell me more' \n 'Explain more'.\nIn that way i will know you are interested in it",
-                "Your favorite topic isn't in my database. If you want me to remember it, just ask more about it " +
-                "saying, \n'tell me more' \n 'Explain more'.\nIn that way i will know you are interested in it",
-                "In that way i will know you are interested in it"
+              "I was not able to find your favorite topic in my database. " +
+              "\nIf you'd like me to remember your favorite topic, just ask me about it again!" +
+              "\nUsing Phrases like 'tell me more' or 'explain more'",
+
+              "Your Favorite topic was not found!. " +
+              "\nIf you'd like me to remember your favorite topic, just ask me about it again!" +
+              "\nUsing Phrases like 'tell me more' or 'explain more'",
+
+              "I am sorry but I don't know your favorite topic " +
+              "\nIf you'd like me to remember your favorite topic, just ask me about it again!" +
+              "\nUsing Phrases like 'tell me more' or 'explain more'"
             };
             return favorite_topic_not_found_messages;
         }
@@ -162,15 +164,15 @@ namespace Part2OfPoe
         {
             string[] onlineSafetyTips =
                 {
-                    "Here's a tip: \nUse strong and unique passwords - Strong passwords are harder to guess and unique passwords prevent multiple accounts from being hacked at once.",
+    "Here's a tip: \nUse strong and unique passwords - Strong passwords are harder to guess and unique passwords prevent multiple accounts from being hacked at once.",
     "Here's a tip: \nEnable two-factor authentication - This adds an extra layer of security by requiring a second verification step when logging in.",
-    "Here's a tip: \nDo not click suspicious links -Unknown links may contain scams, viruses, or phishing websites designed to steal information.",
+    "Here's a tip: \nDo not click suspicious links - Unknown links may contain scams, viruses, or phishing websites designed to steal information.",
     "Here's a tip: \nKeep your software updated - Updates fix security weaknesses and protect your device from new threats.",
     "Here's a tip: \nAvoid sharing personal information online - Sharing sensitive details can expose you to identity theft and scams.",
-    "Here's a tip: \nUse antivirus and firewall protection -These tools help detect, block, and remove harmful software.",
-    "Here's a tip: \nBe careful when using public Wi-Fi -Public networks are less secure and hackers may intercept your information.",
+    "Here's a tip: \nUse antivirus and firewall protection - These tools help detect, block, and remove harmful software.",
+    "Here's a tip: \nBe careful when using public Wi-Fi - Public networks are less secure and hackers may intercept your information.",
     "Here's a tip: \nVerify websites before entering passwords - Fake websites can steal login information by pretending to be trusted sites.",
-    "Here's a tip: \nDo not download unknown files -Untrusted downloads may contain malware or viruses that damage your device.",
+    "Here's a tip: \nDo not download unknown files - Untrusted downloads may contain malware or viruses that damage your device.",
     "Here's a tip: \nLog out of accounts on shared devices - Logging out prevents other users from accessing your personal accounts."
                 };
             return onlineSafetyTips;

@@ -102,6 +102,7 @@ namespace Part2OfPoe
         private void SendMessageButton(object sender, RoutedEventArgs e)
         {
             string message = chat_input.Text;
+
             name = UsernameTextBox.Text;
             // create a stack panel to hold the name and message
             StackPanel panel = new StackPanel
@@ -111,6 +112,7 @@ namespace Part2OfPoe
 
             panel.Children.Add(list_items.user_name(name));
             panel.Children.Add(list_items.message_input(message));
+            topicFound = false;
 
             chats_list.Items.Add(panel);
 
@@ -140,6 +142,7 @@ namespace Part2OfPoe
             {
                 if (message.ToLower().Trim().Contains(topic.Key))
                 {
+                    
                     count = 1;
                     int randomIndex = random.Next(0, topic.Value.Length);
 
@@ -163,7 +166,7 @@ namespace Part2OfPoe
 
                     focus_or_clear_chat_input();
                     topicFound = true;
-                    break;
+                    
                 }
 
             }
@@ -272,7 +275,7 @@ namespace Part2OfPoe
                         chats_list.Items.Add(topic_panel);
 
                         focus_or_clear_chat_input();
-                    
+                        topicFound=true;
                         
                     }
 
@@ -309,7 +312,7 @@ namespace Part2OfPoe
             }
 
             // if no topic is found in the message, return a random response from the dictionary
-            if (!topicFound )
+            if (!topicFound)
             {
                 Random rand = new Random();
                 int index = rand.Next(0, dictionary.random_responces_if_no_info().Length);
@@ -330,8 +333,7 @@ namespace Part2OfPoe
                 current_topic = "";
 
                 chats_list.Items.Add(response_panel);
-                chat_input.Focus();
-                chat_input.Clear();
+                focus_or_clear_chat_input();
 
             }
 
@@ -359,6 +361,7 @@ namespace Part2OfPoe
                     File.AppendAllText("topics.txt", $" Favorite topic: {name} {current_topic} " + Environment.NewLine);
                 }
 
+                MessageBox.Show("I will remember that!", "Favorite Topic", MessageBoxButton.OK, MessageBoxImage.Information);
 
             }
             else
