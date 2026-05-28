@@ -23,7 +23,7 @@ namespace Part2OfPoe
         {
             this.Closing += MainWindow_Closing;
             InitializeComponent();
-           // new voice_greeting();
+            new voice_greeting();
             
         }
         //Global variables
