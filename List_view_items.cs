@@ -173,6 +173,7 @@ namespace Part2OfPoe
             };
             return welcome_item;
         }
+        // 
         public ListViewItem return_sentiment_support_and_tip(string sentiment, string tip)
         {
             TextBlock block = new TextBlock()
