@@ -23,10 +23,10 @@ namespace Part2OfPoe
         {
             this.Closing += MainWindow_Closing;
             InitializeComponent();
-            new voice_greeting();
+            //new voice_greeting();
             
         }
-        //Global variables
+        //Global variable
         string name;
         
 
@@ -39,7 +39,10 @@ namespace Part2OfPoe
         List_view_items list_items = new List_view_items();
         // create an instance of the name validation class to access the method that validates the name input
         name_validation validate = new name_validation();
-        
+
+        task_repo task_repo = new task_repo();
+
+
 
         // variables to keep track of the current topic and index of the response for that topic
         string current_topic = "";
@@ -48,7 +51,7 @@ namespace Part2OfPoe
         bool more_info_true_or_fasle = false;
         int count = 1;
 
-
+       
 
         // method to start the chatbot when the start button is clicked
         private void start_ai(object sender, RoutedEventArgs e)
@@ -58,7 +61,7 @@ namespace Part2OfPoe
             // set username grid visible
             UsernameGrid.Visibility = Visibility.Visible;
         }
-
+        
 
         // method to submit the username and start the chat
         private void SubmitButton_Click(object sender, RoutedEventArgs e)
@@ -105,6 +108,47 @@ namespace Part2OfPoe
             string message = chat_input.Text;
 
             name = UsernameTextBox.Text;
+
+            //chech if the message is to add a task
+            if (message.StartsWith("add task"))
+            {
+                try
+                {
+                    string[] parts = message.Split(',');
+
+                    string title = parts[1];
+                    string description = parts[2];
+
+                    DateTime? reminder = null;
+
+                    if(parts.Length > 3)
+                    {
+                        reminder = DateTime.Parse(parts[3]);
+                    }
+
+                    task_repo.add_task(title, description, reminder);
+
+                    StackPanel Panel = new StackPanel
+                    {
+                        Orientation = Orientation.Vertical
+                    };
+
+                    Panel.Children.Add(list_items.topic_item("Task added successfully!"));
+
+                }
+                catch
+                {
+                    StackPanel Panel = new StackPanel
+                    {
+                        Orientation = Orientation.Vertical
+                    };
+
+                    Panel.Children.Add(list_items.No_Info("Invalid task format. Please use the format: add task,Title,Description,YYYY/MM/DD"));
+
+                }
+                focus_or_clear_chat_input();
+
+            }
             // create a stack panel to hold the name and message
             StackPanel panel = new StackPanel
             {

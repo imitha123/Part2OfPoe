@@ -76,6 +76,7 @@
     <Compile Include="memory_recall.cs" />
     <Compile Include="my_dictionary_and_arrays.cs" />
     <Compile Include="name_validation.cs" />
+    <Compile Include="task_repo.cs" />
     <Compile Include="voice_greeting.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
