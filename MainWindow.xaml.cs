@@ -28,7 +28,7 @@ namespace Part2OfPoe
         }
         //Global variables
         string name;
-
+        
 
         Random random = new Random();
         // create an instance of the dictionary and arrays class to access the topics and responses
@@ -39,6 +39,7 @@ namespace Part2OfPoe
         List_view_items list_items = new List_view_items();
         // create an instance of the name validation class to access the method that validates the name input
         name_validation validate = new name_validation();
+        
 
         // variables to keep track of the current topic and index of the response for that topic
         string current_topic = "";
