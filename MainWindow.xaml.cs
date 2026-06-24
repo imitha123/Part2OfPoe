@@ -109,46 +109,6 @@ namespace Part2OfPoe
 
             name = UsernameTextBox.Text;
 
-            //chech if the message is to add a task
-            if (message.StartsWith("add task"))
-            {
-                try
-                {
-                    string[] parts = message.Split(',');
-
-                    string title = parts[1];
-                    string description = parts[2];
-
-                    DateTime? reminder = null;
-
-                    if(parts.Length > 3)
-                    {
-                        reminder = DateTime.Parse(parts[3]);
-                    }
-
-                    task_repo.add_task(title, description, reminder);
-
-                    StackPanel Panel = new StackPanel
-                    {
-                        Orientation = Orientation.Vertical
-                    };
-
-                    Panel.Children.Add(list_items.topic_item("Task added successfully!"));
-
-                }
-                catch
-                {
-                    StackPanel Panel = new StackPanel
-                    {
-                        Orientation = Orientation.Vertical
-                    };
-
-                    Panel.Children.Add(list_items.No_Info("Invalid task format. Please use the format: add task,Title,Description,YYYY/MM/DD"));
-
-                }
-                focus_or_clear_chat_input();
-
-            }
             // create a stack panel to hold the name and message
             StackPanel panel = new StackPanel
             {
@@ -160,6 +120,53 @@ namespace Part2OfPoe
             topicFound = false;
 
             chats_list.Items.Add(panel);
+            message.ToLower();
+            //chech if the message is to add a task
+            if (message.StartsWith("add task"))
+            {
+                try
+                {
+                    string[] parts = message.Split(',');
+
+
+                    string title = parts[1];
+                    string description = parts[2];
+
+                    DateTime? reminder = null;
+
+                    if(parts.Length > 3)
+                    {
+                        reminder = DateTime.Parse(parts[3]);
+                    }
+
+
+
+
+                    StackPanel Panel = new StackPanel
+                    {
+                        Orientation = Orientation.Vertical
+                    };
+ 
+                    Panel.Children.Add(list_items.chatbot_name());
+                    Panel.Children.Add(list_items.topic_item("Task added successfully!"));
+                    chats_list.Items.Add(Panel);
+
+                }
+                catch
+                {
+                    StackPanel Panel = new StackPanel
+                    {
+                        Orientation = Orientation.Vertical
+                    };
+
+                    Panel.Children.Add(list_items.chatbot_name());
+                    Panel.Children.Add(list_items.No_Info("Invalid task format. Please use the format: add task,Title,Description,YYYY/MM/DD"));
+                    chats_list.Items.Add(Panel);
+                }
+                focus_or_clear_chat_input();
+                return;
+            }
+           
 
             // validate the message input
             if (String.IsNullOrEmpty(message))
