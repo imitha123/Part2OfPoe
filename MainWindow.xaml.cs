@@ -131,8 +131,7 @@ namespace Part2OfPoe
 
                     string title = parts[1].Trim();
                     string description = parts[2].Trim();
-
-                    string reminder = null;
+                    string reminder = string.Empty;
 
                     if(parts.Length > 3)
                     {

@@ -245,6 +245,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="SQLQuery1.sql" />
     <Resource Include="R.jpg" />
     <Resource Include="cybersecurity_dark_blue_background.jpg" />
     <Resource Include="cybersecurity_ai_chatbot_logo.jpg" />
