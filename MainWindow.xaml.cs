@@ -40,7 +40,7 @@ namespace Part2OfPoe
         // create an instance of the name validation class to access the method that validates the name input
         name_validation validate = new name_validation();
 
-        task_repo task_repo = new task_repo();
+        task_repo repo = new task_repo();
 
 
 
@@ -120,26 +120,26 @@ namespace Part2OfPoe
             topicFound = false;
 
             chats_list.Items.Add(panel);
-            message.ToLower();
+            
             //chech if the message is to add a task
-            if (message.StartsWith("add task"))
+            if (message.ToLower().StartsWith("add task"))
             {
                 try
                 {
                     string[] parts = message.Split(',');
 
 
-                    string title = parts[1];
-                    string description = parts[2];
+                    string title = parts[1].Trim();
+                    string description = parts[2].Trim();
 
-                    DateTime? reminder = null;
+                    string reminder = null;
 
                     if(parts.Length > 3)
                     {
-                        reminder = DateTime.Parse(parts[3]);
+                        reminder = parts[3].Trim();
                     }
 
-
+                    repo.add_task(title, description, reminder);
 
 
                     StackPanel Panel = new StackPanel
