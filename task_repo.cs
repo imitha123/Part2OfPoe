@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data.SqlClient;
 
 namespace Part2OfPoe
@@ -7,7 +8,7 @@ namespace Part2OfPoe
     {
         public readonly string connection = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=task_db;Integrated Security=True";
 
-        public void add_task(string title, string description,string reminder)
+        public void add_task(string title, string description,DateTime? reminder)
         {
             using (SqlConnection conn = new SqlConnection(connection))
             {
@@ -33,6 +34,34 @@ namespace Part2OfPoe
                 cmd.ExecuteNonQuery();
 
             }
+        }
+        public List<task> get_tasks()
+        {
+            List<task> tasks = new List<task>();
+
+            using (SqlConnection conn = new SqlConnection(connection))
+            {
+                conn.Open();
+
+                string query = @"SELECT * FROM tasks";
+
+                SqlCommand cmd = new SqlCommand(query, conn);
+
+                SqlDataReader reader = cmd.ExecuteReader();
+
+                while (reader.Read())
+                {
+                   tasks.Add(new task
+                   {
+                       task_title = reader["task_title"].ToString(),
+                       task_description = reader["task_description"].ToString(),
+                       reminder_time = reader["reminder_time"] == DBNull.Value ? null : reader["reminder_time"].ToString()
+                   });
+                }
+
+            }
+
+                return tasks;
         }
     }
 }

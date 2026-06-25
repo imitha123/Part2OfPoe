@@ -131,11 +131,11 @@ namespace Part2OfPoe
 
                     string title = parts[1].Trim();
                     string description = parts[2].Trim();
-                    string reminder = string.Empty;
+                    DateTime? reminder = null;
 
-                    if(parts.Length > 3)
+                    if (parts.Length > 3)
                     {
-                        reminder = parts[3].Trim();
+                        reminder = DateTime.Parse(parts[3]);
                     }
 
                     repo.add_task(title, description, reminder);
@@ -147,7 +147,7 @@ namespace Part2OfPoe
                     };
  
                     Panel.Children.Add(list_items.chatbot_name());
-                    Panel.Children.Add(list_items.topic_item("Task added successfully!"));
+                    Panel.Children.Add(list_items.return_from_database("Task Successfully added"));
                     chats_list.Items.Add(Panel);
 
                 }
@@ -159,13 +159,40 @@ namespace Part2OfPoe
                     };
 
                     Panel.Children.Add(list_items.chatbot_name());
-                    Panel.Children.Add(list_items.No_Info("Invalid task format. Please use the format: add task,Title,Description,YYYY/MM/DD"));
+                    Panel.Children.Add(list_items.return_from_database("Invalid task format. Please use the format: add task,Title,Description,YYYY/MM/DD\""));
                     chats_list.Items.Add(Panel);
                 }
                 focus_or_clear_chat_input();
                 return;
             }
            
+            if(message.ToLower().Equals("display tasks"))
+            {
+                    var tasks = repo.get_tasks();
+
+                foreach (var task in tasks)
+                {
+                    StackPanel Panel = new StackPanel
+                    {
+                        Orientation = Orientation.Vertical
+                    };
+
+                    if (task.reminder_time == null)
+                    {
+                        task.reminder_time = "No reminder set";
+                    }
+
+                    
+                    Panel.Children.Add(list_items.chatbot_name());
+                    Panel.Children.Add(list_items.return_from_database($"Title: {task.task_title}, Description: {task.task_description}, Reminder: {task.reminder_time}"));
+                    chats_list.Items.Add(Panel);
+
+                    
+                }
+                focus_or_clear_chat_input();
+                return;
+            }
+
 
             // validate the message input
             if (String.IsNullOrEmpty(message))
