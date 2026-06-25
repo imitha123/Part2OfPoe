@@ -193,6 +193,38 @@ namespace Part2OfPoe
                 return;
             }
 
+            if (message.Trim().ToLower().StartsWith("delete task"))
+            {
+                int task_id = Convert.ToInt32(message.Replace("delete task", ""));
+
+                try
+                {
+                    StackPanel Panel = new StackPanel
+                    {
+                        Orientation = Orientation.Vertical
+                    };
+
+                    repo.delete_task(task_id);
+
+                    Panel.Children.Add(list_items.chatbot_name());
+                    Panel.Children.Add(list_items.return_from_database("Task Successfully deleted"));
+                    chats_list.Items.Add(Panel);
+                }
+                catch
+                {
+                    StackPanel Panel = new StackPanel
+                    {
+                        Orientation = Orientation.Vertical
+                    };
+
+                    Panel.Children.Add(list_items.chatbot_name());
+                    Panel.Children.Add(list_items.return_from_database("Invalid task id"));
+                    chats_list.Items.Add(Panel);
+                }
+                focus_or_clear_chat_input();
+                return;
+            }
+
 
             // validate the message input
             if (String.IsNullOrEmpty(message))

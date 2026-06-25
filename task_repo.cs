@@ -63,5 +63,20 @@ namespace Part2OfPoe
 
                 return tasks;
         }
-    }
+        public void delete_task(int taskid)
+        {
+            using (SqlConnection conn = new SqlConnection(connection))
+            {
+                conn.Open();
+                string query = @"DELETE FROM tasks WHERE task_id = @taskid";
+
+                SqlCommand cmd = new SqlCommand(query, conn);
+
+                cmd.Parameters.AddWithValue("@taskid", taskid);
+
+                cmd.ExecuteNonQuery();
+            }
+        }
+}
+
 }
