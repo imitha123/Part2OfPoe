@@ -178,6 +178,7 @@
     <Compile Include="chatbot_voice.cs" />
     <Compile Include="List_view_items.cs" />
     <Compile Include="memory_recall.cs" />
+    <Compile Include="mini_game.cs" />
     <Compile Include="my_dictionary_and_arrays.cs" />
     <Compile Include="name_validation.cs" />
     <Compile Include="task.cs" />

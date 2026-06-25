@@ -249,6 +249,44 @@ namespace Part2OfPoe
             return topic_item;
         }
 
+        public ListViewItem gaming_container(string cybersecurityQuiz)
+        {
+            TextBlock block = new TextBlock()
+            {
+                Text = $": {cybersecurityQuiz} ",
+                TextWrapping = TextWrapping.Wrap,
+                Foreground = Brushes.White,
+                FontSize = 16,
+                Margin = new Thickness(5)
+
+            };
+
+            Border border = new Border()
+            {
+                CornerRadius = new CornerRadius(27),
+                Width = 650,
+                Background = Brushes.Black,
+                BorderThickness = new Thickness(1.5),
+                Padding = new Thickness(10),
+                Child = block,
+                Effect = new DropShadowEffect
+                {
+                    BlurRadius = 10,
+                    ShadowDepth = 2,
+                    Color = Colors.Cyan,
+                    Opacity = 0.25
+                }
+            };
+            ListViewItem topic_item = new ListViewItem()
+            {
+                Content = border,
+                Background = Brushes.Transparent,
+                BorderThickness = new Thickness(1)
+            };
+
+            return topic_item;
+        }
+
     }
     
 }

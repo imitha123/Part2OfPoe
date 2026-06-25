@@ -39,8 +39,10 @@ namespace Part2OfPoe
         List_view_items list_items = new List_view_items();
         // create an instance of the name validation class to access the method that validates the name input
         name_validation validate = new name_validation();
-
+        // create an instance of the tasks repository class to access the methods that interact with the database
         task_repo repo = new task_repo();
+        // create an instance of the mini game class to access the methods that start the mini game
+        mini_game quiz = new mini_game();
 
 
 
@@ -50,8 +52,9 @@ namespace Part2OfPoe
         bool topicFound = false;
         bool more_info_true_or_fasle = false;
         int count = 1;
+        int randomIndex;
 
-       
+
 
         // method to start the chatbot when the start button is clicked
         private void start_ai(object sender, RoutedEventArgs e)
@@ -258,227 +261,310 @@ namespace Part2OfPoe
                 return;
             }
 
-            // validate the message input
-            if (String.IsNullOrEmpty(message))
-            {
-                MessageBox.Show("Message cannot be empty!", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                chat_input.Focus();
-                return;
-            }
-            // close the application if the user types "exit"
-            if (message.ToLower().Trim().Equals("exit"))
+            if(message.ToLower().Contains("mini game") || message.ToLower().Contains("mini quiz"))
             {
 
-                if (MessageBoxResult.Yes == MessageBox.Show("Are you sure you want to exit the application?", "Exit Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question))
+                var questions = dictionary.quiz_question().ToList();
+
+                 randomIndex = random.Next(questions.Count);
+
+                var question = questions[randomIndex];
+          
+
+                string quizText = $"Question: {question.Key}\n\n";
+
+                foreach (string answer in question.Value)
                 {
-                    Application.Current.Shutdown();
-                }
-                chat_input.Focus();
-                chat_input.Clear();
-
-                return;
-            }
-
-            // Check if the message contains any of the topics
-            foreach (var topic in dictionary.Topics())
-            {
-                if (message.ToLower().Trim().Contains(topic.Key))
-                {
-                    
-                    count = 1;
-                    int randomIndex = random.Next(0, topic.Value.Length);
-
-                    current_topic = topic.Key;
-                    current_index = randomIndex;
-
-                    voice.speak(topic.Value[randomIndex]);
-
-                  
-                    // create a stack panel to hold the chatbot name and response
-                    StackPanel topic_panel = new StackPanel
-                    {
-                        Orientation = Orientation.Vertical
-                    };
-
-                    topic_panel.Children.Add(list_items.chatbot_name());
-                    topic_panel.Children.Add(list_items.topic_item(topic.Value[randomIndex]));
-
-                    // add the stack panel to the chat list
-                    chats_list.Items.Add(topic_panel);
-
-                    focus_or_clear_chat_input();
-                    topicFound = true;
-                    
+                    quizText += answer + "\n";
                 }
 
-            }
-            // check if the message contains tell me more or explain more or give me another tip and responds with another definition of the topic that is already mentioned in the message
-            if(message.ToLower().Trim().Contains("tell me more") || message.ToLower().Trim().Contains("explain more") || message.ToLower().Trim().Contains("give me another tip"))
-            {
-                Random rand = new Random();
-                int index = rand.Next(0, dictionary.random_more_info_query_without_topic().Length);
-
-                if (!String.IsNullOrEmpty(current_topic) )
-                {
-                    // if the user asks for more information about a topic for the second time, don't ask if they are interested in it
-                    if(count == 1)
-                    {
-                        if_user_asks_for_more_info();
-                    }
-                    // increment 
-                    count++;
-
-
-                    var topic_definitions = dictionary.Topics()[current_topic];
-                    current_index = (current_index + 1) % topic_definitions.Length;
-
-                    StackPanel topic_panel = new StackPanel
-                    {
-                        Orientation = Orientation.Vertical
-                    };
-                    topic_panel.Children.Add(list_items.chatbot_name());
-                    topic_panel.Children.Add(list_items.topic_item($": {topic_definitions[current_index]} "));
-                    chats_list.Items.Add(topic_panel);
-
-                    voice.speak(topic_definitions[current_index]);
-
-                    focus_or_clear_chat_input();
-                    topicFound = true;
-                }
-                    else
-                    {
-                    
-                    voice.speak(dictionary.random_more_info_query_without_topic()[index]);
-                    MessageBox.Show(dictionary.random_more_info_query_without_topic()[index], "No Topic Mentioned", MessageBoxButton.OK, MessageBoxImage.Information);
-
-                  
-                    StackPanel topic_panel = new StackPanel
-                    {
-                        Orientation = Orientation.Vertical
-                    };
-
-                    topic_panel.Children.Add(list_items.chatbot_name());
-                    topic_panel.Children.Add(list_items.topic_item(dictionary.random_more_info_query_without_topic()[index]));
-                    chats_list.Items.Add(topic_panel);
-
-                    focus_or_clear_chat_input();
-                    topicFound = true;
-                }
-            }
-            // if the user asks what their favorite topic is, the chatbot responds with the topic that is mentioned int the topics file according to the name of the user
-            if (message.ToLower().Trim().Contains("favorite topic"))
-            {
-                count = 1;
-                if (!File.Exists("topics.txt"))
-                {
-                    File.Create("topics.txt").Close();
-                }
-                Random rand = new Random();
-                int index = rand.Next(0, dictionary.random_favorite_topic_not_found().Length);
-
-                // check if the file contains the name of the user and it returns the last name of that user with its topic
-                if (File.Exists("topics.txt"))
-                {
-                    string[] lines = File.ReadAllLines("topics.txt");
-                    string favorite_topic = lines.LastOrDefault(line => line.Contains($"Favorite topic: {name}"));
-                    favorite_topic = favorite_topic?.Replace($"Favorite topic: {name}", "").Trim();
-
-                    if (!string.IsNullOrEmpty(favorite_topic))
-                    {
-                        voice.speak($"Your favorite topic is {favorite_topic}");
-                        MessageBox.Show($"Your favorite topic is {favorite_topic}", "Favorite Topic", MessageBoxButton.OK, MessageBoxImage.Information);
-
-                        focus_or_clear_chat_input();
-                        topicFound = true;
-                        StackPanel topic_panel = new StackPanel
-                        {
-                            Orientation = Orientation.Vertical
-                        };
-
-                        topic_panel.Children.Add(list_items.chatbot_name());
-                        topic_panel.Children.Add(list_items.topic_item($"Your favorite topic is {favorite_topic}"));
-                        chats_list.Items.Add(topic_panel);
-                        topicFound = true;
-                    }
-                    else
-                    {
-                        
-                        voice.speak(dictionary.random_favorite_topic_not_found()[index]);
-                        MessageBox.Show(dictionary.random_favorite_topic_not_found()[index], "Favorite Topic Not Found", MessageBoxButton.OK, MessageBoxImage.Information);
-                       
-
-                        StackPanel topic_panel = new StackPanel
-                        {
-                            Orientation = Orientation.Vertical
-                        };
-                        topic_panel.Children.Add(list_items.chatbot_name());
-                        topic_panel.Children.Add(list_items.topic_item(dictionary.random_favorite_topic_not_found()[index]));
-
-                        chats_list.Items.Add(topic_panel);
-
-                        focus_or_clear_chat_input();
-                        topicFound=true;
-                        
-                    }
-
-                }
-
-            }
-            // check for any sentiment in the message and respond with a random response from the dictionary according to the sentiment
-            foreach (var sentiment in dictionary.sentiment_detection())
-            {
-                if (message.ToLower().Trim().Contains(sentiment.Key))
-                {
-                    count = 1;
-                    int randomIndex = random.Next(0, sentiment.Value.Length);
-                    int rand = random.Next(0, dictionary.user_tips().Length);
-                    voice.speak(sentiment.Value[randomIndex]);
-                    
-                   
-                    StackPanel sentiment_panel = new StackPanel
-                    {
-                        Orientation = Orientation.Vertical
-                    };
-                    sentiment_panel.Children.Add(list_items.chatbot_name());
-                    sentiment_panel.Children.Add(list_items.return_sentiment_support_and_tip(sentiment.Value[randomIndex], dictionary.user_tips()[rand]));
-                    
-                    voice.speak(dictionary.user_tips()[rand]);
-
-                    chats_list.Items.Add(sentiment_panel);
-
-                    focus_or_clear_chat_input();
-                    topicFound = true;
-                    break;
-                }
-
-            }
-
-            // if no topic is found in the message, return a random response from the dictionary
-            if (!topicFound)
-            {
-                Random rand = new Random();
-                int index = rand.Next(0, dictionary.random_responces_if_no_info().Length);
-
-                StackPanel response_panel = new StackPanel
+                StackPanel Panel = new StackPanel
                 {
                     Orientation = Orientation.Vertical
                 };
-                // list item for the chatbot response with a random response from the dictionary and different color and font size
-                
-                voice.speak(dictionary.random_responces_if_no_info()[index]);
 
+                Panel.Children.Add(list_items.chatbot_name());
+                Panel.Children.Add(list_items.gaming_container(quizText));
 
-                response_panel.Children.Add(list_items.chatbot_name());
-                response_panel.Children.Add(list_items.No_Info(dictionary.random_responces_if_no_info()[index]));
-                // reset the current topic and index
-                current_index = 0;
-                current_topic = "";
+                chats_list.Items.Add(Panel);
 
-                chats_list.Items.Add(response_panel);
                 focus_or_clear_chat_input();
 
+                return;
             }
 
+            if (message.ToLower().Trim().StartsWith("answer:"))
+            {
+                var questions = dictionary.quiz_question().ToList();
+
+                string answer = message.Substring("answer:".Length).Trim().ToUpper();
+
+                randomIndex = random.Next(questions.Count);
+
+                foreach (int num in dictionary.quiz_answers().Keys)
+                {
+                  
+
+                    if (num == randomIndex)
+                    {
+                        var ans = dictionary.quiz_answers().Values;
+
+
+                        if (answer.Equals(ans))
+                        {
+                            StackPanel Panel = new StackPanel
+                            {
+                                Orientation = Orientation.Vertical
+                            };
+                            Panel.Children.Add(list_items.chatbot_name());
+                            Panel.Children.Add(list_items.gaming_container("Correct answer!"));
+                            chats_list.Items.Add(Panel);
+
+                        }
+                        else
+                        {
+                            StackPanel Panel = new StackPanel
+                            {
+                                Orientation = Orientation.Vertical
+                            };
+                            Panel.Children.Add(list_items.chatbot_name());
+                            Panel.Children.Add(list_items.gaming_container($"Incorrect answer!"));
+                            chats_list.Items.Add(Panel);
+                        }
+
+                    }
+                }
+
+                focus_or_clear_chat_input();
+                return;
+            }
+
+
+
+
+
+
+                // validate the message input
+                if (String.IsNullOrEmpty(message))
+                {
+                    MessageBox.Show("Message cannot be empty!", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    chat_input.Focus();
+                    return;
+                }
+                // close the application if the user types "exit"
+                if (message.ToLower().Trim().Equals("exit"))
+                {
+
+                    if (MessageBoxResult.Yes == MessageBox.Show("Are you sure you want to exit the application?", "Exit Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question))
+                    {
+                        Application.Current.Shutdown();
+                    }
+                    chat_input.Focus();
+                    chat_input.Clear();
+
+                    return;
+                }
+
+                // Check if the message contains any of the topics
+                foreach (var topic in dictionary.Topics())
+                {
+                    if (message.ToLower().Trim().Contains(topic.Key))
+                    {
+
+                        count = 1;
+                        int randomIndex = random.Next(0, topic.Value.Length);
+
+                        current_topic = topic.Key;
+                        current_index = randomIndex;
+
+                        voice.speak(topic.Value[randomIndex]);
+
+
+                        // create a stack panel to hold the chatbot name and response
+                        StackPanel topic_panel = new StackPanel
+                        {
+                            Orientation = Orientation.Vertical
+                        };
+
+                        topic_panel.Children.Add(list_items.chatbot_name());
+                        topic_panel.Children.Add(list_items.topic_item(topic.Value[randomIndex]));
+
+                        // add the stack panel to the chat list
+                        chats_list.Items.Add(topic_panel);
+
+                        focus_or_clear_chat_input();
+                        topicFound = true;
+
+                    }
+
+                }
+                // check if the message contains tell me more or explain more or give me another tip and responds with another definition of the topic that is already mentioned in the message
+                if (message.ToLower().Trim().Contains("tell me more") || message.ToLower().Trim().Contains("explain more") || message.ToLower().Trim().Contains("give me another tip"))
+                {
+                    Random rand = new Random();
+                    int index = rand.Next(0, dictionary.random_more_info_query_without_topic().Length);
+
+                    if (!String.IsNullOrEmpty(current_topic))
+                    {
+                        // if the user asks for more information about a topic for the second time, don't ask if they are interested in it
+                        if (count == 1)
+                        {
+                            if_user_asks_for_more_info();
+                        }
+                        // increment 
+                        count++;
+
+
+                        var topic_definitions = dictionary.Topics()[current_topic];
+                        current_index = (current_index + 1) % topic_definitions.Length;
+
+                        StackPanel topic_panel = new StackPanel
+                        {
+                            Orientation = Orientation.Vertical
+                        };
+                        topic_panel.Children.Add(list_items.chatbot_name());
+                        topic_panel.Children.Add(list_items.topic_item($": {topic_definitions[current_index]} "));
+                        chats_list.Items.Add(topic_panel);
+
+                        voice.speak(topic_definitions[current_index]);
+
+                        focus_or_clear_chat_input();
+                        topicFound = true;
+                    }
+                    else
+                    {
+
+                        voice.speak(dictionary.random_more_info_query_without_topic()[index]);
+                        MessageBox.Show(dictionary.random_more_info_query_without_topic()[index], "No Topic Mentioned", MessageBoxButton.OK, MessageBoxImage.Information);
+
+
+                        StackPanel topic_panel = new StackPanel
+                        {
+                            Orientation = Orientation.Vertical
+                        };
+
+                        topic_panel.Children.Add(list_items.chatbot_name());
+                        topic_panel.Children.Add(list_items.topic_item(dictionary.random_more_info_query_without_topic()[index]));
+                        chats_list.Items.Add(topic_panel);
+
+                        focus_or_clear_chat_input();
+                        topicFound = true;
+                    }
+                }
+                // if the user asks what their favorite topic is, the chatbot responds with the topic that is mentioned int the topics file according to the name of the user
+                if (message.ToLower().Trim().Contains("favorite topic"))
+                {
+                    count = 1;
+                    if (!File.Exists("topics.txt"))
+                    {
+                        File.Create("topics.txt").Close();
+                    }
+                    Random rand = new Random();
+                    int index = rand.Next(0, dictionary.random_favorite_topic_not_found().Length);
+
+                    // check if the file contains the name of the user and it returns the last name of that user with its topic
+                    if (File.Exists("topics.txt"))
+                    {
+                        string[] lines = File.ReadAllLines("topics.txt");
+                        string favorite_topic = lines.LastOrDefault(line => line.Contains($"Favorite topic: {name}"));
+                        favorite_topic = favorite_topic?.Replace($"Favorite topic: {name}", "").Trim();
+
+                        if (!string.IsNullOrEmpty(favorite_topic))
+                        {
+                            voice.speak($"Your favorite topic is {favorite_topic}");
+                            MessageBox.Show($"Your favorite topic is {favorite_topic}", "Favorite Topic", MessageBoxButton.OK, MessageBoxImage.Information);
+
+                            focus_or_clear_chat_input();
+                            topicFound = true;
+                            StackPanel topic_panel = new StackPanel
+                            {
+                                Orientation = Orientation.Vertical
+                            };
+
+                            topic_panel.Children.Add(list_items.chatbot_name());
+                            topic_panel.Children.Add(list_items.topic_item($"Your favorite topic is {favorite_topic}"));
+                            chats_list.Items.Add(topic_panel);
+                            topicFound = true;
+                        }
+                        else
+                        {
+
+                            voice.speak(dictionary.random_favorite_topic_not_found()[index]);
+                            MessageBox.Show(dictionary.random_favorite_topic_not_found()[index], "Favorite Topic Not Found", MessageBoxButton.OK, MessageBoxImage.Information);
+
+
+                            StackPanel topic_panel = new StackPanel
+                            {
+                                Orientation = Orientation.Vertical
+                            };
+                            topic_panel.Children.Add(list_items.chatbot_name());
+                            topic_panel.Children.Add(list_items.topic_item(dictionary.random_favorite_topic_not_found()[index]));
+
+                            chats_list.Items.Add(topic_panel);
+
+                            focus_or_clear_chat_input();
+                            topicFound = true;
+
+                        }
+
+                    }
+
+                }
+                // check for any sentiment in the message and respond with a random response from the dictionary according to the sentiment
+                foreach (var sentiment in dictionary.sentiment_detection())
+                {
+                    if (message.ToLower().Trim().Contains(sentiment.Key))
+                    {
+                        count = 1;
+                        int randomIndex = random.Next(0, sentiment.Value.Length);
+                        int rand = random.Next(0, dictionary.user_tips().Length);
+                        voice.speak(sentiment.Value[randomIndex]);
+
+
+                        StackPanel sentiment_panel = new StackPanel
+                        {
+                            Orientation = Orientation.Vertical
+                        };
+                        sentiment_panel.Children.Add(list_items.chatbot_name());
+                        sentiment_panel.Children.Add(list_items.return_sentiment_support_and_tip(sentiment.Value[randomIndex], dictionary.user_tips()[rand]));
+
+                        voice.speak(dictionary.user_tips()[rand]);
+
+                        chats_list.Items.Add(sentiment_panel);
+
+                        focus_or_clear_chat_input();
+                        topicFound = true;
+                        break;
+                    }
+
+                }
+
+                // if no topic is found in the message, return a random response from the dictionary
+                if (!topicFound)
+                {
+                    Random rand = new Random();
+                    int index = rand.Next(0, dictionary.random_responces_if_no_info().Length);
+
+                    StackPanel response_panel = new StackPanel
+                    {
+                        Orientation = Orientation.Vertical
+                    };
+                    // list item for the chatbot response with a random response from the dictionary and different color and font size
+
+                    voice.speak(dictionary.random_responces_if_no_info()[index]);
+
+
+                    response_panel.Children.Add(list_items.chatbot_name());
+                    response_panel.Children.Add(list_items.No_Info(dictionary.random_responces_if_no_info()[index]));
+                    // reset the current topic and index
+                    current_index = 0;
+                    current_topic = "";
+
+                    chats_list.Items.Add(response_panel);
+                    focus_or_clear_chat_input();
+
+                }
+            
 
         }
         
@@ -538,6 +624,10 @@ namespace Part2OfPoe
                 e.Cancel = true;
             }
 
+
+        }
+        public void check_if_answer_is_correct()
+        {
 
         }
        

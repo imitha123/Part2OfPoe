@@ -177,5 +177,143 @@ namespace Part2OfPoe
                 };
             return onlineSafetyTips;
         }
+
+        public Dictionary<string, string[]> quiz_question()
+        {
+            Dictionary<string, string[]> cybersecurityQuiz = new Dictionary<string, string[]>
+{
+    {
+        "What is cybersecurity?",
+        new string[]
+        {
+            "A. A type of computer hardware",
+            "B. Protecting systems, networks, and data from digital attacks", // Correct
+            "C. A software development language",
+            "D. A process for increasing internet speed",
+            "E. A method of building physical security fences"
+        }
+    },
+    {
+        "What is phishing?",
+        new string[]
+        {
+            "A. A way to improve Wi-Fi signal strength",
+            "B. A type of antivirus software",
+            "C. A scam that tricks users into revealing sensitive information", // Correct
+            "D. A method of backing up files",
+            "E. A computer programming language"
+        }
+    },
+    {
+        "What is malware?",
+        new string[]
+        {
+            "A. Software used for graphic design",
+            "B. A secure operating system",
+            "C. Malicious software designed to harm systems", // Correct
+            "D. A type of computer monitor",
+            "E. A database management tool"
+        }
+    },
+    {
+        "What does a firewall do?",
+        new string[]
+        {
+            "A. Stores files online",
+            "B. Repairs damaged hard drives",
+            "C. Monitors and controls network traffic", // Correct
+            "D. Creates passwords automatically",
+            "E. Cools down computer hardware"
+        }
+    },
+    {
+        "Why should you use strong passwords?",
+        new string[]
+        {
+            "A. They improve screen resolution",
+            "B. They are harder for attackers to guess", // Correct
+            "C. They reduce electricity usage",
+            "D. They increase computer storage",
+            "E. They make your internet faster"
+        }
+    },
+    {
+        "What is two-factor authentication (2FA)?",
+        new string[]
+        {
+            "A. Creating two email accounts",
+            "B. A second verification step for logging in", // Correct
+            "C. Connecting to two Wi-Fi networks",
+            "D. Having two antivirus programs",
+            "E. Using two computers at once"
+        }
+    },
+    {
+        "What should you do with a suspicious email?",
+        new string[]
+        {
+            "A. Reply with your password",
+            "B. Disable your antivirus",
+            "C. Open all attachments immediately",
+            "D. Avoid clicking links and verify the sender", // Correct
+            "E. Forward it to everyone"
+        }
+    },
+    {
+        "What is a computer virus?",
+        new string[]
+        {
+            "A. A backup device",
+            "B. A type of malware that can spread between systems", // Correct
+            "C. A network cable",
+            "D. A secure web browser",
+            "E. A computer cooling system"
+        }
+    },
+    {
+        "Why are software updates important?",
+        new string[]
+        {
+            "A. They improve keyboard durability",
+            "B. They often fix security vulnerabilities", // Correct
+            "C. They remove the need for passwords",
+            "D. They permanently increase RAM",
+            "E. They make all files smaller"
+        }
+    },
+    {
+        "What is an antivirus program?",
+        new string[]
+        {
+            "A. A computer game",
+            "B. A type of processor",
+            "C. Software that detects and removes malware", // Correct
+            "D. A cloud storage service",
+            "E. A tool for creating websites"
+        }
     }
+};
+            return cybersecurityQuiz;
+        }
+
+        public Dictionary<int, string> quiz_answers()
+        {
+            Dictionary<int, string> cybersecurityQuiz = new Dictionary<int, string>
+    {
+        { 0, "B" },
+        { 1, "C" },
+        { 2, "C" },
+        { 3, "C" },
+        { 4, "B" },
+        { 5, "B" },
+        { 6, "D" },
+        { 7, "B" },
+        { 8, "B" },
+        { 9, "C" }
+    };
+
+            return cybersecurityQuiz;
+        }
+
+        }
 }
