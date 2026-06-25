@@ -8,18 +8,19 @@ namespace Part2OfPoe
     {
         public readonly string connection = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=task_db;Integrated Security=True";
 
-        public void add_task(string title, string description,DateTime? reminder)
+        public void add_task(string title, string description, DateTime? reminder)
         {
             using (SqlConnection conn = new SqlConnection(connection))
             {
                 conn.Open();
 
-                string query = @"INSERT INTO tasks (task_title, task_description, reminder_time) VALUES (@title, @description, @reminder)";
+                string query = @"INSERT INTO tasks (task_title, task_description,reminder_time) VALUES (@title, @description,@reminder)";
 
                 SqlCommand cmd = new SqlCommand(query, conn);
 
                 cmd.Parameters.AddWithValue("@title", title);
                 cmd.Parameters.AddWithValue("@description", description);
+
 
                 if (reminder == null)
                 {
@@ -31,6 +32,7 @@ namespace Part2OfPoe
                     cmd.Parameters.AddWithValue("@reminder", reminder);
 
                 }
+
                 cmd.ExecuteNonQuery();
 
             }
@@ -77,6 +79,22 @@ namespace Part2OfPoe
                 cmd.ExecuteNonQuery();
             }
         }
-}
 
+        public void complete_task(int taskid)
+        {
+            using (SqlConnection conn = new SqlConnection(connection))
+            {
+                conn.Open();
+                string query = @"UPDATE tasks SET is_completed = 1 WHERE task_id = @taskid";
+
+                SqlCommand cmd = new SqlCommand(query, conn);
+
+                cmd.Parameters.AddWithValue("@taskid", taskid);
+
+                cmd.ExecuteNonQuery();
+            }
+        }
+        
+
+}
 }

@@ -195,10 +195,11 @@ namespace Part2OfPoe
 
             if (message.Trim().ToLower().StartsWith("delete task"))
             {
-                int task_id = Convert.ToInt32(message.Replace("delete task", ""));
-
+               
                 try
                 {
+                    int task_id = Convert.ToInt32(message.Replace("delete task", "").Trim());
+
                     StackPanel Panel = new StackPanel
                     {
                         Orientation = Orientation.Vertical
@@ -225,6 +226,37 @@ namespace Part2OfPoe
                 return;
             }
 
+            if (message.ToLower().StartsWith("complete task"))
+            {
+                try
+                {
+                    int task_id = Convert.ToInt32(message.Substring("complete task".Length).Trim());
+
+                    repo.complete_task(task_id);
+
+                    StackPanel Panel = new StackPanel
+                    {
+                        Orientation = Orientation.Vertical
+                    };
+
+                    Panel.Children.Add(list_items.chatbot_name());
+                    Panel.Children.Add(list_items.return_from_database("Task Successfully completed"));
+                    chats_list.Items.Add(Panel);
+
+                }
+                catch
+                {
+                    StackPanel Panel = new StackPanel
+                    {
+                        Orientation = Orientation.Vertical
+                    };
+                    Panel.Children.Add(list_items.chatbot_name());
+                    Panel.Children.Add(list_items.return_from_database("Invalid task id"));
+                    chats_list.Items.Add(Panel);
+                }
+                focus_or_clear_chat_input();
+                return;
+            }
 
             // validate the message input
             if (String.IsNullOrEmpty(message))
@@ -449,8 +481,9 @@ namespace Part2OfPoe
 
 
         }
-       
-     
+        
+
+
         // method to write to the file a user is interested in a topic
         private void if_user_asks_for_more_info()
         {
