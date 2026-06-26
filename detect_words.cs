@@ -1,7 +1,10 @@
-﻿namespace Part2OfPoe
+﻿using System.Collections.Generic;
+
+namespace Part2OfPoe
 {
     public class detect_words
     {
+       public List<string> user_events = new List<string>();
         public string[] addTaskKeywords =
 {
     "add task",
@@ -36,7 +39,7 @@
 
         public string[] deleteTaskKeywords =
         {
-    "delete a task",
+    "delete task",
     "remove a task",
     "erase a task",
     "discard a task"
@@ -64,34 +67,41 @@
     "start game"
 };
 
-        public string[] showCompletedActivitiesKeywords =
-{
-    "show me completed tasks",
-    "view completed tasks",
-    "completed tasks",
-    "show completed activities",
-    "view completed activities",
-    "my completed tasks",
-    "show activity log",
-    "my completed activities",
-    "display completed tasks",
-    "display completed activities",
-    "list completed tasks",
-    "list completed activities",
-    "what have i completed",
-    "what did i complete",
-    "tasks i completed",
-    "activities i completed",
-    "finished tasks",
-    "finished activities",
-    "done tasks",
-    "done activities",
-    "what is completed",
-    "show me what i completed",
-    "show what i've completed",
-    "show me completed tasks",
-    "show me completed activities"
+       public string[] showActivityLogKeywords =
+ {
+    "activity log",
+    "show my activity log",
+    "view activity log",
+    "display activity log",
+    "open activity log",
+    "see activity log",
+    "my activity log",
+    "show my activity log",
+    "view my activity log",
+    "display my activity log",
+    "show activities",
+    "view activities",
+    "display activities",
+    "show history",
+    "view history",
+    "activity history",
+    "task history",
+    "show task history",
+    "view task history",
+    "display task history",
+    "show completed history",
+    "recent activities",
+    "show recent activities",
+    "view recent activities",
+    "what have i done",
+    "what activities have i completed",
+    "show my progress",
+    "view progress",
+    "show log",
+    "view log"
 };
+
+
         public bool ContainsKeyword(string message, string[] keywords)
         {
             message = message.ToLower();
@@ -103,6 +113,18 @@
             }
 
             return false;
+        }
+
+        public void save_events(string events)
+        {
+            user_events.Add(events);
+
+        }
+
+        public List<string> show_activitiwes()
+        {
+
+            return user_events;
         }
     }
 }

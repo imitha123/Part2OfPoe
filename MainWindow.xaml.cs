@@ -132,9 +132,13 @@ namespace Part2OfPoe
             topicFound = false;
 
             chats_list.Items.Add(panel);
-            
+
             //chech if the message is to add a task
-            if (NLP_feature.ContainsKeyword(message.ToLower().Trim(),NLP_feature.addTaskKeywords))
+
+            string matchedKeyword2 = NLP_feature.addTaskKeywords
+   .FirstOrDefault(k => message.ToLower().Contains(k));
+
+            if(matchedKeyword2 != null)
             {
                 try
                 {
@@ -157,10 +161,11 @@ namespace Part2OfPoe
                     {
                         Orientation = Orientation.Vertical
                     };
- 
+
                     Panel.Children.Add(list_items.chatbot_name());
                     Panel.Children.Add(list_items.return_from_database("Task Successfully added"));
                     chats_list.Items.Add(Panel);
+                    NLP_feature.save_events("TASK ADDED");
 
                 }
                 catch
@@ -177,6 +182,8 @@ namespace Part2OfPoe
                 focus_or_clear_chat_input();
                 return;
             }
+              
+            
            // view the tasl
             if(NLP_feature.ContainsKeyword(message.ToLower().Trim(),NLP_feature.viewTaskKeywords))
             {
@@ -198,19 +205,24 @@ namespace Part2OfPoe
                     Panel.Children.Add(list_items.chatbot_name());
                     Panel.Children.Add(list_items.return_from_database($"Title: {task.task_title}, Description: {task.task_description}, Reminder: {task.reminder_time}"));
                     chats_list.Items.Add(Panel);
+                    NLP_feature.save_events("TASK VIEWED");
 
-                    
                 }
                 focus_or_clear_chat_input();
                 return;
             }
             // delete a task
-            if (NLP_feature.ContainsKeyword(message.ToLower().Trim(), NLP_feature.deleteTaskKeywords))
+
+            string matchedKeyword1 = NLP_feature.completeTaskKeywords
+             .FirstOrDefault(k => message.ToLower().Contains(k));
+
+            if (matchedKeyword1 != null)
             {
-               
                 try
                 {
-                    int task_id = Convert.ToInt32(message.Replace("delete task", "").Trim());
+                    int task_id = Convert.ToInt32(
+                     message.Substring(message.ToLower().IndexOf(matchedKeyword1) + matchedKeyword1.Length).Trim()
+);
 
                     StackPanel Panel = new StackPanel
                     {
@@ -222,6 +234,7 @@ namespace Part2OfPoe
                     Panel.Children.Add(list_items.chatbot_name());
                     Panel.Children.Add(list_items.return_from_database("Task Successfully deleted"));
                     chats_list.Items.Add(Panel);
+                    NLP_feature.save_events("TASK DELETED");
                 }
                 catch
                 {
@@ -237,6 +250,10 @@ namespace Part2OfPoe
                 focus_or_clear_chat_input();
                 return;
             }
+            
+               
+              
+            
             // complete a task
             string matchedKeyword = NLP_feature.completeTaskKeywords
                .FirstOrDefault(k => message.ToLower().Contains(k));
@@ -260,7 +277,7 @@ namespace Part2OfPoe
                     Panel.Children.Add(list_items.chatbot_name());
                     Panel.Children.Add(list_items.return_from_database("Task Successfully completed"));
                     chats_list.Items.Add(Panel);
-
+                    NLP_feature.save_events("TASK COMPLETED");
                 }
                 catch
                 {
@@ -276,18 +293,24 @@ namespace Part2OfPoe
                 return;
             }
 
-            if(NLP_feature.ContainsKeyword(message.ToLower().Trim(), NLP_feature.quizKeywords))
+
+
+            if (NLP_feature.ContainsKeyword(message.ToLower().Trim(), NLP_feature.quizKeywords))
             {
 
-                MessageBox.Show("Quiz Rules \n Start with 'Answer:' then give the correct letter\n" +
-                    "There's a total of 10 questions. Answer them all and you'll get your score at the end.\n" +
-                    "Type 'exit quiz' to leave the game.","Game Information",MessageBoxButton.OK,MessageBoxImage.Information);
-                var questions = dictionary.quiz_question().ToList();
 
-                 randomIndex = random.Next(questions.Count);
+                MessageBox.Show("Quiz Rules \n Start with 'Answer:' then give the correct letter\n" +
+               "There's a total of 10 questions. Answer them all and you'll get your score at the end.\n" +
+               "Type 'exit quiz' to leave the game.", "Game Information", MessageBoxButton.OK, MessageBoxImage.Information);
+
+
+
+                var questions = dictionary.quiz_question().ToList();
+                NLP_feature.save_events("QUIZ STARTED");
+                randomIndex = random.Next(questions.Count);
 
                 var question = questions[randomIndex];
-          
+
 
                 string quizText = $"Question: {question.Key}\n\n";
 
@@ -307,95 +330,87 @@ namespace Part2OfPoe
                 chats_list.Items.Add(Panel);
 
                 focus_or_clear_chat_input();
-
-                return;
-            }
-
-            if (NLP_feature.ContainsKeyword(message.ToLower().Trim(), NLP_feature.showCompletedActivitiesKeywords))
-            {
-               
-                    StackPanel Panel = new StackPanel
-                    {
-                        Orientation = Orientation.Vertical
-                    };
-
-                    string completed = string.Join(Environment.NewLine, repo.save_completed_events());
-
-                if(!string.IsNullOrWhiteSpace(completed))
-                {
-                    Panel.Children.Add(list_items.chatbot_name());
-                    Panel.Children.Add(list_items.topic_item("Comepleted tasks \n"+completed));
-
-                    chats_list.Items.Add(Panel);
-                }
-                else
-                {
-                    Panel.Children.Add(list_items.chatbot_name());
-                    Panel.Children.Add(list_items.topic_item("No Completed tasks"));
-
-                    chats_list.Items.Add(Panel);
-
-                }
-                    
-                focus_or_clear_chat_input();
-
                 return;
 
             }
 
-
-                if (message.ToLower().Trim().StartsWith("answer:"))
-                {
-                    var questions = dictionary.quiz_question().ToList();
-
-                    string answer = message.Substring("answer:".Length).Trim();
-
-
-                    currentQuestionIndex = randomIndex;
-
-                    var answers = dictionary.quiz_answers();
-                    int user_score = 0;
-
-                    if (answers.ContainsKey(currentQuestionIndex))
+                    if (message.ToLower().Trim().StartsWith("answer:"))
                     {
 
-                        correctAnswer = answers[currentQuestionIndex];
+                        string answer = message.Substring("answer:".Length).Trim();
 
-                        if (answer.Equals(correctAnswer, StringComparison.OrdinalIgnoreCase))
+
+                        currentQuestionIndex = randomIndex;
+
+                        var answers = dictionary.quiz_answers();
+
+
+                        if (answers.ContainsKey(currentQuestionIndex))
                         {
-                            user_score++;
-                            StackPanel Panel = new StackPanel
+
+                            correctAnswer = answers[currentQuestionIndex];
+
+                            if (answer.Equals(correctAnswer, StringComparison.OrdinalIgnoreCase))
+                            {
+
+                                StackPanel Panel2 = new StackPanel
+                                {
+                                    Orientation = Orientation.Vertical
+                                };
+                                Panel2.Children.Add(list_items.chatbot_name());
+                                Panel2.Children.Add(list_items.gaming_container($"Correct answer! {dictionary.quiz_explanations()[currentQuestionIndex]}"));
+                                chats_list.Items.Add(Panel2);
+
+
+                            }
+
+                        }
+                        else
+                        {
+                            StackPanel Panel1 = new StackPanel
                             {
                                 Orientation = Orientation.Vertical
                             };
-                            Panel.Children.Add(list_items.chatbot_name());
-                            Panel.Children.Add(list_items.gaming_container($"Correct answer! {dictionary.quiz_explanations()[currentQuestionIndex]}"));
-                            chats_list.Items.Add(Panel);
-
-
+                            Panel1.Children.Add(list_items.chatbot_name());
+                            Panel1.Children.Add(list_items.gaming_container("Invalid answer. Please try again."));
+                            chats_list.Items.Add(Panel1);
                         }
 
+                        focus_or_clear_chat_input();
+
+                        return;
                     }
-                    else
-                    {
-                        StackPanel Panel = new StackPanel
-                        {
-                            Orientation = Orientation.Vertical
-                        };
-                        Panel.Children.Add(list_items.chatbot_name());
-                        Panel.Children.Add(list_items.gaming_container("Invalid answer. Please try again."));
-                        chats_list.Items.Add(Panel);
-                    }
+
+                    
+            if (NLP_feature.ContainsKeyword(message.ToLower().Trim(), NLP_feature.showActivityLogKeywords))
+            {
+                StackPanel Panel = new StackPanel
+                {
+                    Orientation = Orientation.Vertical
+                };
+
+                string user_event = string.Join(Environment.NewLine, NLP_feature.show_activitiwes());
+
+                Panel.Children.Add(list_items.chatbot_name());
+
+                if (!string.IsNullOrWhiteSpace(user_event))
+                {
+                    Panel.Children.Add(
+                        list_items.topic_item("Here are the most recent events:\n\n" + user_event));
+                }
+                else
+                {
+                    Panel.Children.Add(
+                        list_items.topic_item("No recent events."));
+                }
+
+                chats_list.Items.Add(Panel);
 
                 focus_or_clear_chat_input();
                 return;
-                
-                }
-
-            if (result == MessageBoxResult.Yes)
-            {
-               
             }
+
+           
 
         
 
@@ -682,12 +697,7 @@ namespace Part2OfPoe
 
 
         }
-        
-            public void AskNextQuestion(string second_answer)
-        {
-           
-}
-       
+              
 
     }
 }
