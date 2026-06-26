@@ -43,6 +43,8 @@ namespace Part2OfPoe
         task_repo repo = new task_repo();
         // create an instance of the mini game class to access the methods that start the mini game
         mini_game quiz = new mini_game();
+        //
+        detect_words NLP_feature = new detect_words();
 
 
 
@@ -53,7 +55,14 @@ namespace Part2OfPoe
         bool more_info_true_or_fasle = false;
         int count = 1;
         int randomIndex;
+        int currentQuestionIndex;
+        List<int> askedQuestions = new List<int>();
+        string correctAnswer;
+        string message ;
 
+
+
+        MessageBoxResult result;
 
 
         // method to start the chatbot when the start button is clicked
@@ -108,7 +117,7 @@ namespace Part2OfPoe
         // method to send a message when the send button is clicked
         private void SendMessageButton(object sender, RoutedEventArgs e)
         {
-            string message = chat_input.Text;
+             message = chat_input.Text;
 
             name = UsernameTextBox.Text;
 
@@ -125,7 +134,7 @@ namespace Part2OfPoe
             chats_list.Items.Add(panel);
             
             //chech if the message is to add a task
-            if (message.ToLower().StartsWith("add task"))
+            if (NLP_feature.ContainsKeyword(message.ToLower().Trim(),NLP_feature.addTaskKeywords))
             {
                 try
                 {
@@ -168,8 +177,8 @@ namespace Part2OfPoe
                 focus_or_clear_chat_input();
                 return;
             }
-           
-            if(message.ToLower().Equals("display tasks"))
+           // view the tasl
+            if(NLP_feature.ContainsKeyword(message.ToLower().Trim(),NLP_feature.viewTaskKeywords))
             {
                     var tasks = repo.get_tasks();
 
@@ -195,8 +204,8 @@ namespace Part2OfPoe
                 focus_or_clear_chat_input();
                 return;
             }
-
-            if (message.Trim().ToLower().StartsWith("delete task"))
+            // delete a task
+            if (NLP_feature.ContainsKeyword(message.ToLower().Trim(), NLP_feature.deleteTaskKeywords))
             {
                
                 try
@@ -228,12 +237,18 @@ namespace Part2OfPoe
                 focus_or_clear_chat_input();
                 return;
             }
+            // complete a task
+            string matchedKeyword = NLP_feature.completeTaskKeywords
+               .FirstOrDefault(k => message.ToLower().Contains(k));
 
-            if (message.ToLower().StartsWith("complete task"))
+
+            if (matchedKeyword != null)
             {
                 try
                 {
-                    int task_id = Convert.ToInt32(message.Substring("complete task".Length).Trim());
+                    int task_id = Convert.ToInt32(
+                      message.Substring(message.ToLower().IndexOf(matchedKeyword) + matchedKeyword.Length).Trim()
+);
 
                     repo.complete_task(task_id);
 
@@ -261,9 +276,12 @@ namespace Part2OfPoe
                 return;
             }
 
-            if(message.ToLower().Contains("mini game") || message.ToLower().Contains("mini quiz"))
+            if(NLP_feature.ContainsKeyword(message.ToLower().Trim(), NLP_feature.quizKeywords))
             {
 
+                MessageBox.Show("Quiz Rules \n Start with 'Answer:' then give the correct letter\n" +
+                    "There's a total of 10 questions. Answer them all and you'll get your score at the end.\n" +
+                    "Type 'exit quiz' to leave the game.","Game Information",MessageBoxButton.OK,MessageBoxImage.Information);
                 var questions = dictionary.quiz_question().ToList();
 
                  randomIndex = random.Next(questions.Count);
@@ -293,59 +311,96 @@ namespace Part2OfPoe
                 return;
             }
 
-            if (message.ToLower().Trim().StartsWith("answer:"))
+            if (NLP_feature.ContainsKeyword(message.ToLower().Trim(), NLP_feature.showCompletedActivitiesKeywords))
             {
-                var questions = dictionary.quiz_question().ToList();
-
-                string answer = message.Substring("answer:".Length).Trim().ToUpper();
-
-                randomIndex = random.Next(questions.Count);
-
-                foreach (int num in dictionary.quiz_answers().Keys)
-                {
-                  
-
-                    if (num == randomIndex)
+               
+                    StackPanel Panel = new StackPanel
                     {
-                        var ans = dictionary.quiz_answers().Values;
+                        Orientation = Orientation.Vertical
+                    };
 
+                    string completed = string.Join(Environment.NewLine, repo.save_completed_events());
 
-                        if (answer.Equals(ans))
-                        {
-                            StackPanel Panel = new StackPanel
-                            {
-                                Orientation = Orientation.Vertical
-                            };
-                            Panel.Children.Add(list_items.chatbot_name());
-                            Panel.Children.Add(list_items.gaming_container("Correct answer!"));
-                            chats_list.Items.Add(Panel);
+                if(!string.IsNullOrWhiteSpace(completed))
+                {
+                    Panel.Children.Add(list_items.chatbot_name());
+                    Panel.Children.Add(list_items.topic_item("Comepleted tasks \n"+completed));
 
-                        }
-                        else
-                        {
-                            StackPanel Panel = new StackPanel
-                            {
-                                Orientation = Orientation.Vertical
-                            };
-                            Panel.Children.Add(list_items.chatbot_name());
-                            Panel.Children.Add(list_items.gaming_container($"Incorrect answer!"));
-                            chats_list.Items.Add(Panel);
-                        }
-
-                    }
+                    chats_list.Items.Add(Panel);
                 }
+                else
+                {
+                    Panel.Children.Add(list_items.chatbot_name());
+                    Panel.Children.Add(list_items.topic_item("No Completed tasks"));
 
+                    chats_list.Items.Add(Panel);
+
+                }
+                    
                 focus_or_clear_chat_input();
+
                 return;
+
             }
 
 
+                if (message.ToLower().Trim().StartsWith("answer:"))
+                {
+                    var questions = dictionary.quiz_question().ToList();
+
+                    string answer = message.Substring("answer:".Length).Trim();
 
 
+                    currentQuestionIndex = randomIndex;
+
+                    var answers = dictionary.quiz_answers();
+                    int user_score = 0;
+
+                    if (answers.ContainsKey(currentQuestionIndex))
+                    {
+
+                        correctAnswer = answers[currentQuestionIndex];
+
+                        if (answer.Equals(correctAnswer, StringComparison.OrdinalIgnoreCase))
+                        {
+                            user_score++;
+                            StackPanel Panel = new StackPanel
+                            {
+                                Orientation = Orientation.Vertical
+                            };
+                            Panel.Children.Add(list_items.chatbot_name());
+                            Panel.Children.Add(list_items.gaming_container($"Correct answer! {dictionary.quiz_explanations()[currentQuestionIndex]}"));
+                            chats_list.Items.Add(Panel);
 
 
-                // validate the message input
-                if (String.IsNullOrEmpty(message))
+                        }
+
+                    }
+                    else
+                    {
+                        StackPanel Panel = new StackPanel
+                        {
+                            Orientation = Orientation.Vertical
+                        };
+                        Panel.Children.Add(list_items.chatbot_name());
+                        Panel.Children.Add(list_items.gaming_container("Invalid answer. Please try again."));
+                        chats_list.Items.Add(Panel);
+                    }
+
+                focus_or_clear_chat_input();
+                return;
+                
+                }
+
+            if (result == MessageBoxResult.Yes)
+            {
+               
+            }
+
+        
+
+            // validate the message input
+            if (String.IsNullOrEmpty(message))
                 {
                     MessageBox.Show("Message cannot be empty!", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                     chat_input.Focus();
@@ -606,6 +661,7 @@ namespace Part2OfPoe
         {
             chat_input.Focus();
             chat_input.Clear();
+            
 
         }
 
@@ -626,10 +682,11 @@ namespace Part2OfPoe
 
 
         }
-        public void check_if_answer_is_correct()
+        
+            public void AskNextQuestion(string second_answer)
         {
-
-        }
+           
+}
        
 
     }

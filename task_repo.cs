@@ -94,7 +94,30 @@ namespace Part2OfPoe
                 cmd.ExecuteNonQuery();
             }
         }
-        
+        public List<string> save_completed_events()
+        {
+            List<string> completedActivities = new List<string>();
 
-}
+            using (SqlConnection conn = new SqlConnection(connection))
+            {
+                conn.Open();
+
+                string query = "SELECT task_title FROM Tasks WHERE is_completed = 1";
+
+                SqlCommand cmd = new SqlCommand(query, conn);
+
+                SqlDataReader reader = cmd.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    completedActivities.Add(reader["task_title"].ToString());
+                }
+
+                reader.Close();
+            }
+
+            return completedActivities;
+        }
+
+    }
 }

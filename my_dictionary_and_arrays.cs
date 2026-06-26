@@ -300,20 +300,69 @@ namespace Part2OfPoe
         {
             Dictionary<int, string> cybersecurityQuiz = new Dictionary<int, string>
     {
-        { 0, "B" },
-        { 1, "C" },
-        { 2, "C" },
-        { 3, "C" },
-        { 4, "B" },
-        { 5, "B" },
-        { 6, "D" },
-        { 7, "B" },
-        { 8, "B" },
-        { 9, "C" }
+        { 0, "b" },
+        { 1, "c" },
+        { 2, "c" },
+        { 3, "c" },
+        { 4, "b" },
+        { 5, "b" },
+        { 6, "d" },
+        { 7, "b" },
+        { 8, "b" },
+        { 9, "c" }
     };
 
             return cybersecurityQuiz;
         }
 
+        public Dictionary<int, string> quiz_explanations()
+        {
+            Dictionary<int, string> quizExplanations = new Dictionary<int, string>
+{
+    {
+        0,
+        "Cybersecurity is the practice of protecting computers, networks, systems, and data from unauthorized access, attacks, and damage."
+    },
+    {
+        1,
+        "Phishing is a cyberattack where criminals impersonate trusted organizations or people to trick users into revealing passwords, banking details, or other sensitive information."
+    },
+    {
+        2,
+        "Malware is malicious software such as viruses, worms, ransomware, and spyware that is designed to damage or exploit computer systems."
+    },
+    {
+        3,
+        "A firewall acts as a security barrier by monitoring and filtering incoming and outgoing network traffic based on security rules."
+    },
+    {
+        4,
+        "Strong passwords are difficult for attackers to guess or crack, helping to protect accounts from unauthorized access."
+    },
+    {
+        5,
+        "Two-factor authentication (2FA) adds an extra layer of security by requiring a second form of verification in addition to a password."
+    },
+    {
+        6,
+        "Suspicious emails should never be trusted immediately. Avoid clicking links or attachments until you've confirmed the sender is legitimate."
+    },
+    {
+        7,
+        "A computer virus is a type of malware that can replicate itself and spread to other files or computers, often causing damage."
+    },
+    {
+        8,
+        "Software updates often contain security patches that fix vulnerabilities attackers could exploit."
+    },
+    {
+        9,
+        "Antivirus software scans for, detects, blocks, and removes malware to help keep a computer secure."
+    }
+};
+            return quizExplanations;
+
+
         }
+}
 }

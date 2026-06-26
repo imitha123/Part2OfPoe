@@ -12,4 +12,6 @@ create table tasks(
 
 select * from tasks;
 
+SELECT task_title FROM tasks WHERE is_completed = 1;
+
 drop table tasks;

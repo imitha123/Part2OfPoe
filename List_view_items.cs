@@ -257,6 +257,7 @@ namespace Part2OfPoe
                 TextWrapping = TextWrapping.Wrap,
                 Foreground = Brushes.White,
                 FontSize = 16,
+                FontFamily = new FontFamily("Comic Sans MS"),
                 Margin = new Thickness(5)
 
             };

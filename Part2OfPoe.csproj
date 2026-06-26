@@ -176,6 +176,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="chatbot_voice.cs" />
+    <Compile Include="detect_words.cs" />
     <Compile Include="List_view_items.cs" />
     <Compile Include="memory_recall.cs" />
     <Compile Include="mini_game.cs" />
